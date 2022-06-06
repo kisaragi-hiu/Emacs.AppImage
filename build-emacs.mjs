@@ -2,7 +2,7 @@ import process from "node:process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { VersionLessThanOrEqual } from "./version.mjs";
 
 function cmd(...command) {
