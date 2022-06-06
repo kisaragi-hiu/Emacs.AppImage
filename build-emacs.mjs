@@ -2,7 +2,7 @@ import process from "process";
 import { spawnSync } from "child_process";
 import { VersionLessThanOrEqual } from "./version.mjs";
 
-function cmd(command) {
+function cmd(...command) {
   return spawnSync(command[0], command.slice(1));
 }
 
