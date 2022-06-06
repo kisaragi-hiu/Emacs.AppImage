@@ -24,6 +24,6 @@ jobs:
         run: node build-emacs.mjs ${{ matrix.emacs_version }}
       - uses: actions/upload-artifact@v3
         with:
-          name: built-files
+          name: built files ${{ matrix.emacs_version }}
           path: build/out/*.AppImage*
           if-no-files-found: error
