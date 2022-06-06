@@ -8,7 +8,7 @@ function cmd(command) {
 
 function print_help() {
   console.log(`
-install-emacs.js <version>
+node build-emacs.mjs <version>
 
 <version>: Something like 28.1, 27.2, 26.3...
 See http://ftpmirror.gnu.org/emacs/ for a list of all versions.
