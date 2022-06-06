@@ -69,13 +69,20 @@ if (!fs.existsSync(`emacs-${version}`)) {
 }
 process.chdir(`emacs-${version}`);
 
-console.log("Adding deb-src entries for apt-get build-dep")
+console.log("Adding deb-src entries for apt-get build-dep");
 // I like explicitly spelling out that we're using bash.
-await cmd("bash", "-c", `
+spawnSync("bash", [
+  "-c",
+  `
 cat /etc/apt/sources.list <(cat /etc/apt/sources.list \
                             | sed 's/^deb/deb-src/') \
-| sudo tee /etc/apt/sources.list`.replaceAll(/[ \n]+/g, " "))
+| sudo tee /etc/apt/sources.list`.replaceAll(/[ \n]+/g, " "),
+]);
 
+console.log("New /etc/apt/sources.list content:");
+await cmd("cat", "/etc/apt/sources.list")
+
+await cmd("sudo", "apt-get", "update");
 await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
 
 build(version);
