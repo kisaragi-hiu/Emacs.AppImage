@@ -2,7 +2,7 @@ import process from "node:process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { VersionLessThanOrEqual } from "./version.mjs";
 
 function cmd(...command) {
@@ -61,14 +61,20 @@ async function build(version) {
 }
 
 if (!fs.existsSync(`emacs-${version}`)) {
-  await cmd(
-    "wget",
+  spawnSync("wget", [
     "-c",
-    `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`
-  );
+    `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`,
+  ]);
   await cmd("tar", "xf", `emacs-${version}.tar.gz`);
 }
 process.chdir(`emacs-${version}`);
+
+console.log("Adding deb-src entries for apt-get build-dep")
+// I like explicitly spelling out that we're using bash.
+await cmd("bash", "-c", `
+cat /etc/apt/sources.list <(cat /etc/apt/sources.list \
+                            | sed 's/^deb/deb-src/') \
+| sudo tee /etc/apt/sources.list`.replaceAll(/[ \n]+/g, " "))
 
 await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
 
