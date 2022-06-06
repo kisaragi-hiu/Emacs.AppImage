@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This file is supposed to be sourced by each Recipe
 # that wants to use the functions contained herein
 # like so:
@@ -117,7 +119,8 @@ move_lib() {
 
 # Delete blacklisted files
 delete_blacklisted() {
-	BLACKLISTED_FILES=$(cat_file_from_url https://github.com/AppImage/pkg2appimage/raw/${PKG2AICOMMIT}/excludelist | sed 's|#.*||g')
+	BLACKLISTED_FILES=$(cat_file_from_url https://github.com/AppImage/pkg2appimage/raw/${PKG2AICOMMIT}/excludelist | sed '/#.*/d' |
+		sed '/libpango/d')
 	echo $BLACKLISTED_FILES
 
 	local DOT_DIR=$(readlink -f .)
