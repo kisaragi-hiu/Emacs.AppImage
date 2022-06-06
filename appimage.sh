@@ -18,8 +18,8 @@ mkdir -p build/$APP/$APP.AppDir/usr/
 
 cd build/$APP/
 
-wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
-. ./functions.sh
+# wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
+. ./package/functions.sh
 
 cd $APP.AppDir
 
