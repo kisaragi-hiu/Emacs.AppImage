@@ -86,7 +86,7 @@ await cmd("sudo", "apt-get", "update");
 await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
 
 process.chdir(`emacs-${version}`);
-build(version);
+await build(version);
 await cmd("sudo", "make", "install");
 process.chdir(`..`);
 fs.copyFileSync("AppRun", path.join(os.homedir(), "AppRun"));
