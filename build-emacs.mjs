@@ -6,7 +6,18 @@ import { spawnSync } from "node:child_process";
 import { VersionLessThanOrEqual } from "./version.mjs";
 
 function cmd(...command) {
-  return spawnSync(command[0], command.slice(1));
+  let p = spawn(command[0], command.slice(1));
+  return new Promise((resolveFunc) => {
+    p.stdout.on("data", (x) => {
+      process.stdout.write(x.toString());
+    });
+    p.stderr.on("data", (x) => {
+      process.stderr.write(x.toString());
+    });
+    p.on("exit", (code) => {
+      resolveFunc(code);
+    });
+  });
 }
 
 function print_help() {
@@ -29,8 +40,8 @@ let all_args = ["--prefix=/app", "--with-x-toolkit=gtk3", "--with-xft"];
 let extra_args = [];
 let make_args = [];
 
-function build(version) {
-  spawnSync("autogen.sh");
+async function build(version) {
+  await cmd("autogen.sh");
   if (VersionLessThanOrEqual("24", version)) {
     extra_args = [...extra_args, "--without-selinux"];
   }
@@ -38,26 +49,30 @@ function build(version) {
     extra_args = [...extra_args, "--with-modules"];
   }
   if (VersionLessThanOrEqual("27", version)) {
-    cmd("sudo", "apt-get", "-y", "libjansson4");
+    await cmd("sudo", "apt-get", "-y", "libjansson4");
     extra_args = [...extra_args, "--with-cairo", "--with-harfbuzz"];
   }
   if (VersionLessThanOrEqual("28", version)) {
     extra_args = [...extra_args, "--with-with-native-compilation"];
     make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
-  spawnSync("configure", [...all_args, ...extra_args]);
-  spawnSync("make", make_args);
+  await cmd("configure", ...all_args, ...extra_args);
+  await cmd("make", ...make_args);
 }
 
-cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
+// await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
 
-cmd("wget", "-c", `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`);
-cmd("tar", "xf", `emacs-${version}.tar.gz`);
+await cmd(
+  "wget",
+  "-c",
+  `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`
+);
+await cmd("tar", "xf", `emacs-${version}.tar.gz`);
 process.chdir(`emacs-${version}`);
-build(version);
-cmd("sudo", "make", "install");
-process.chdir(`..`);
-fs.copyFileSync("AppRun", path.join(os.homedir(), "AppRun"));
+// build(version);
+// await cmd("sudo", "make", "install");
+// process.chdir(`..`);
+// fs.copyFileSync("AppRun", path.join(os.homedir(), "AppRun"));
 
 // This should put the finished AppImage in ./build/Emacs/out/
-cmd("bash", "-ex", "appimage.sh", version);
+// await cmd("bash", "-ex", "appimage.sh", version);
