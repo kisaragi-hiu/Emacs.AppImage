@@ -87,8 +87,8 @@ await cmd(
 console.log("New /etc/apt/sources.list content:");
 await cmd("cat", "/etc/apt/sources.list");
 
-await cmd("sudo", "apt-get", "update");
-await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
+spawnSync("sudo", ["apt-get", "update"]);
+spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs-gtk"]);
 
 process.chdir(`emacs-${version}`);
 await build(version);
