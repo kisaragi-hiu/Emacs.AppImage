@@ -26,4 +26,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: built-files
-          path: build/Emacs/out/*.AppImage*
+          path: build/Emacs/*.AppImage*
