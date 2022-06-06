@@ -48,7 +48,7 @@ async function build(version) {
     extra_args = [...extra_args, "--without-selinux"];
   }
   if (VersionLessThanOrEqual("25", version)) {
-    // await cmd("sudo", "apt-get", "-y", "libwebkit2gtk-4.0");
+    // await cmd("sudo", "apt-get", "-y", "install", "libwebkit2gtk-4.0");
     extra_args = [
       ...extra_args,
       // "--with-xwidgets",
@@ -56,11 +56,11 @@ async function build(version) {
     ];
   }
   if (VersionLessThanOrEqual("27", version)) {
-    await cmd("sudo", "apt-get", "-y", "libjansson4");
+    await cmd("sudo", "apt-get", "-y", "install", "libjansson4");
     extra_args = [...extra_args, "--with-cairo", "--with-harfbuzz"];
   }
   if (VersionLessThanOrEqual("28", version)) {
-    extra_args = [...extra_args, "--with-with-native-compilation"];
+    extra_args = [...extra_args, "--with-native-compilation"];
     make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
   await cmd("./configure", ...all_args, ...extra_args);
