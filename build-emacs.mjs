@@ -6,6 +6,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { VersionLessThanOrEqual } from "./version.mjs";
 
 function cmd(...command) {
+  console.log(command);
   let p = spawn(command[0], command.slice(1));
   return new Promise((resolveFunc) => {
     p.stdout.on("data", (x) => {
@@ -41,7 +42,8 @@ let extra_args = [];
 let make_args = [];
 
 async function build(version) {
-  await cmd("autogen.sh");
+  await cmd("ls");
+  await cmd("./autogen.sh");
   if (VersionLessThanOrEqual("24", version)) {
     extra_args = [...extra_args, "--without-selinux"];
   }
@@ -56,7 +58,7 @@ async function build(version) {
     extra_args = [...extra_args, "--with-with-native-compilation"];
     make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
-  await cmd("configure", ...all_args, ...extra_args);
+  await cmd("./configure", ...all_args, ...extra_args);
   await cmd("make", ...make_args);
 }
 
@@ -67,24 +69,23 @@ if (!fs.existsSync(`emacs-${version}`)) {
   ]);
   await cmd("tar", "xf", `emacs-${version}.tar.gz`);
 }
-process.chdir(`emacs-${version}`);
 
 console.log("Adding deb-src entries for apt-get build-dep");
-// I like explicitly spelling out that we're using bash.
-spawnSync("bash", [
-  "-c",
-  `
-cat /etc/apt/sources.list <(cat /etc/apt/sources.list \
-                            | sed 's/^deb/deb-src/') \
-| sudo tee /etc/apt/sources.list`.replaceAll(/[ \n]+/g, " "),
-]);
+await cmd(
+  "sudo",
+  "sed",
+  "-Ei",
+  "/.*partner/! s/^# (deb-src .*)/\1/g",
+  "/etc/apt/sources.list"
+);
 
 console.log("New /etc/apt/sources.list content:");
-await cmd("cat", "/etc/apt/sources.list")
+await cmd("cat", "/etc/apt/sources.list");
 
 await cmd("sudo", "apt-get", "update");
 await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
 
+process.chdir(`emacs-${version}`);
 build(version);
 await cmd("sudo", "make", "install");
 process.chdir(`..`);
