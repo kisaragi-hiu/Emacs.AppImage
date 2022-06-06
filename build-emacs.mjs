@@ -37,13 +37,10 @@ if (!version) {
   process.exit(1);
 }
 
-let all_args = ["--prefix=/app", "--with-x-toolkit=gtk3", "--with-xft"];
 let extra_args = [];
 let make_args = [];
 
 async function build(version) {
-  await cmd("ls");
-  await cmd("./autogen.sh");
   if (VersionLessThanOrEqual("24", version)) {
     extra_args = [...extra_args, "--without-selinux"];
   }
@@ -64,7 +61,15 @@ async function build(version) {
     extra_args = [...extra_args, "--with-native-compilation"];
     make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
-  await cmd("./configure", ...all_args, ...extra_args);
+  await cmd("ls");
+  await cmd("./autogen.sh");
+  await cmd(
+    "./configure",
+    "--prefix=/app",
+    "--with-x-toolkit=gtk3",
+    "--with-xft",
+    ...extra_args
+  );
   await cmd("make", ...make_args);
 }
 
