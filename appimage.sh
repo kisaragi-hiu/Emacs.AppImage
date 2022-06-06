@@ -14,9 +14,9 @@ LOWERAPP=${APP,,}
 GIT_REV=$(git rev-parse --short HEAD)
 echo $GIT_REV
 
-mkdir -p $HOME/$APP/$APP.AppDir/usr/
+mkdir -p build/$APP/$APP.AppDir/usr/
 
-cd $HOME/$APP/
+cd build/$APP/
 
 wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
 . ./functions.sh
@@ -24,17 +24,18 @@ wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./func
 cd $APP.AppDir
 
 sudo chown -R $USER /app/
-BINARY=$(find /app/bin/ -name emacs*  -type f -executable | head -n 1)
+BINARY=$(find /app/bin/ -name emacs* -type f -executable | head -n 1)
 sed -i -e 's|/app|././|g' $BINARY
 
 cp -r /app/* ./usr/
-BINARY=$(find ./usr/bin/ -name emacs*  -type f -executable | head -n 1)
+BINARY=$(find ./usr/bin/ -name emacs* -type f -executable | head -n 1)
 
 ########################################################################
 # Copy desktop and icon file to AppDir for AppRun to pick them up
 ########################################################################
 
-wget -c "https://raw.githubusercontent.com/probonopd/Emacs.AppImage/master/AppRun" ; chmod a+x ./AppRun
+cp ~/AppRun .
+chmod a+x ./AppRun
 get_desktop
 get_icon
 
@@ -60,7 +61,7 @@ rm -rf app/ || true
 ########################################################################
 
 GLIBC_NEEDED=$(glibc_needed)
-VERSION=${RELEASE_VERSION}
+VERSION="$1"
 
 ########################################################################
 # Patch away absolute paths; it would be nice if they were relative
@@ -73,7 +74,11 @@ sed -i -e 's|/app|././|g' $BINARY
 # Other Emacs-specific finishing touches
 ########################################################################
 
-( cd usr/bin/ ; rm emacs ; ln -s emacs-* emacs )
+(
+	cd usr/bin/
+	rm emacs
+	ln -s emacs-* emacs
+)
 
 # mv etc/ e
 # sed -i -e 's|/etc|../e|g' $BINARY

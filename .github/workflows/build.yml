@@ -1,0 +1,24 @@
+name: "Build Emacs"
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version:
+          - 27.2
+          - 26.3
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build AppImage
+        run: node build-emacs.mjs
+      - uses: actions/upload-artifact@v3
+        with:
+          name: built-files
+          path: build/Emacs/out/*.AppImage*
