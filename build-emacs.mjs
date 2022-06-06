@@ -75,7 +75,7 @@ await cmd(
   "sudo",
   "sed",
   "-Ei",
-  "/.*partner/! s/^# (deb-src .*)/\1/g",
+  "/.*partner/! s/^# (deb-src .*)/\\1/g",
   "/etc/apt/sources.list"
 );
 
