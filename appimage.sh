@@ -16,10 +16,10 @@ echo $GIT_REV
 
 mkdir -p build/$APP/$APP.AppDir/usr/
 
-cd build/$APP/
-
 # wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
 . ./package/functions.sh
+
+cd build/$APP/
 
 cd $APP.AppDir
 
