@@ -60,19 +60,22 @@ async function build(version) {
   await cmd("make", ...make_args);
 }
 
-// await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
-
-await cmd(
-  "wget",
-  "-c",
-  `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`
-);
-await cmd("tar", "xf", `emacs-${version}.tar.gz`);
+if (!fs.existsSync(`emacs-${version}`)) {
+  await cmd(
+    "wget",
+    "-c",
+    `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`
+  );
+  await cmd("tar", "xf", `emacs-${version}.tar.gz`);
+}
 process.chdir(`emacs-${version}`);
-// build(version);
-// await cmd("sudo", "make", "install");
-// process.chdir(`..`);
-// fs.copyFileSync("AppRun", path.join(os.homedir(), "AppRun"));
+
+await cmd("sudo", "apt-get", "-y", "build-dep", "emacs-gtk");
+
+build(version);
+await cmd("sudo", "make", "install");
+process.chdir(`..`);
+fs.copyFileSync("AppRun", path.join(os.homedir(), "AppRun"));
 
 // This should put the finished AppImage in ./build/Emacs/out/
-// await cmd("bash", "-ex", "appimage.sh", version);
+await cmd("bash", "-ex", "appimage.sh", version);
