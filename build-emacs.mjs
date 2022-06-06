@@ -48,7 +48,12 @@ async function build(version) {
     extra_args = [...extra_args, "--without-selinux"];
   }
   if (VersionLessThanOrEqual("25", version)) {
-    extra_args = [...extra_args, "--with-modules"];
+    // await cmd("sudo", "apt-get", "-y", "libwebkit2gtk-4.0");
+    extra_args = [
+      ...extra_args,
+      // "--with-xwidgets",
+      "--with-modules",
+    ];
   }
   if (VersionLessThanOrEqual("27", version)) {
     await cmd("sudo", "apt-get", "-y", "libjansson4");
