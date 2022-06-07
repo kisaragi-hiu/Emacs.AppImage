@@ -30,48 +30,44 @@ async function build(version) {
   let extra_args = [];
   let make_args = [];
   let toolkit = "";
+  let extra_packages = [];
   // Emacs 23 / 24 need this
-  spawnSync("sudo", [
-    "apt-get",
-    "-y",
-    "install",
-    "libjpeg-dev",
-    "libgif-dev",
-    "libtiff-dev",
-  ]);
+  extra_packages = ["libjpeg-dev", "libgif-dev", "libtiff-dev"];
   if (VersionLessThan(version, "22")) {
     toolkit = "lucid";
-  } else if (VersionBetween("22", version, "24")) {
-    toolkit = "gtk";
-  } else {
-    toolkit = "gtk3";
-  }
-  if (VersionLessThan(version, "25")) {
-    spawnSync("sudo", ["apt-get", "-y", "install", "gcc-4.8", "libxpm-dev"]);
+    extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
     extra_args = [...extra_args, "CC=gcc-4.8"];
-    if (VersionBetween("23", version, "24")) {
-      spawnSync("sudo", [
-        "apt-get",
-        "-y",
-        "install",
-        "libgconf2-dev",
-        "libgpm-dev",
-        "libm17n-dev",
-        "libotf-dev",
-      ]);
-      extra_args = [
-        ...extra_args,
-        // image.c:7540:3: error: too few arguments to function ‘DGifCloseFile’
-        "--with-gif=no",
-        "--with-crt-dir=/usr/lib/x86_64-linux-gnu",
-      ];
-    } else if (VersionBetween("24", version, "25")) {
-      spawnSync("sudo", ["apt-get", "-y", "install", "libgtk-3-dev"]);
-    }
+  } else if (VersionBetween("22", "23")) {
+    toolkit = "gtk";
+    extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
+    extra_args = [...extra_args, "CC=gcc-4.8"];
+  } else if (VersionBetween("23", "24")) {
+    toolkit = "gtk";
+    extra_packages = [
+      ...extra_packages,
+      "gcc-4.8",
+      "libxpm-dev",
+      "libgconf2-dev",
+      "libgpm-dev",
+      "libm17n-dev",
+      "libotf-dev",
+    ];
+    extra_args = [
+      ...extra_args,
+      "CC=gcc-4.8",
+      // image.c:7540:3: error: too few arguments to function ‘DGifCloseFile’
+      "--with-gif=no",
+      "--with-crt-dir=/usr/lib/x86_64-linux-gnu",
+    ];
+  } else if (VersionBetween("24", "25")) {
+    toolkit = "gtk3";
+    extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
+    extra_args = [...extra_args, "CC=gcc-4.8"];
   }
   // Emacs 24 adds GTK3 and SELinux support
   // We want SELinux to be off
   if (VersionLessThanOrEqual("24", version)) {
+    toolkit = "gtk3";
     extra_args = [...extra_args, "--without-selinux"];
   }
   // Emacs 25 adds native modules and xwidgets
@@ -85,26 +81,29 @@ async function build(version) {
     ];
   }
   if (VersionLessThanOrEqual("27", version)) {
-    await cmd("sudo", "apt-get", "-y", "install", "libjansson-dev");
+    extra_packages = [...extra_packages, "libjansson-dev"];
     extra_args = [...extra_args, "--with-cairo", "--with-harfbuzz"];
   }
   if (VersionLessThanOrEqual("28", version)) {
-    // await cmd("sudo", "apt-get", "-y", "install", "libgccjit-9-dev");
+    // extra_packages = [...extra_packages, "libgccjit-9-dev"];
     // extra_args = [...extra_args, "--with-native-compilation"];
     // make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
   // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
-    await cmd("sudo", "apt-get", "-y", "install", "libwebp-dev");
+    // extra_packages = [...extra_packages, "libwebp-dev"];
   }
   await cmd("ls");
+  if (toolkit === "gtk") {
+    extra_packages = [...extra_packages, "libgtk2.0-dev", "libglib2.0-dev"];
+  } else if (toolkit === "gtk3") {
+    extra_packages = [...extra_packages, "libgtk-3-dev"];
+  }
+  await cmd("sudo", "apt-get", "install", "-y", ...extra_packages);
   // Emacs <= 24.1 (not sure about 24.2~24.5) ship ./configure with
   // the tarball and do not include ./autogen.sh.
   if (fs.existsSync("./autogen.sh")) {
     await cmd("./autogen.sh");
-  }
-  if (toolkit === "gtk") {
-    cmd("sudo", "apt-get", "-y", "install", "libgtk2.0-dev", "libglib2.0-dev");
   }
   await cmd(
     "env",
