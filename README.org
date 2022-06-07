@@ -6,15 +6,7 @@ AppImages are built on GitHub Actions and distributed
 
 I used https://github.com/probonopd/Emacs.AppImage as a starting point.
 
-* Excludelist
-
-- 25 ::
-  - =libc.so.6=
-  - =libdl.so.2=
-  - =libgdk_pixbuf-2.0.so.0=
-  - =libpthread.so.0=
-  - =librt.so.1=
-
+* TODO Emacs 27 pdmp isn't being loaded properly
 * TODO Also build for 25, 24, 23, 22
 * TODO Also build for other minor versions
 * TODO Enable xwidgets

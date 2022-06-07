@@ -51,7 +51,11 @@ async function build(version) {
     await cmd("sudo", "apt-get", "-y", "install", "libwebp-dev");
   }
   await cmd("ls");
-  await cmd("./autogen.sh");
+  // Emacs <= 24.1 (not sure about 24.2~24.5) ship ./configure with
+  // the tarball and do not include ./autogen.sh.
+  if (fs.existsSync("./autogen.sh")) {
+    await cmd("./autogen.sh");
+  }
   await cmd(
     "./configure",
     "--prefix=/app",
