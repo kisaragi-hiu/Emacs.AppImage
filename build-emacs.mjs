@@ -69,6 +69,8 @@ async function build(version) {
     cmd("sudo", "apt-get", "-y", "install", "libgtk2.0-dev", "libglib2.0-dev");
   }
   await cmd(
+    "env",
+    "ac_cv_lib_gif_EGifPutExtensionLast=yes",
     "./configure",
     "--prefix=/app",
     `--with-x-toolkit=${toolkit}`,
