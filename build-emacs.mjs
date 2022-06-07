@@ -89,8 +89,8 @@ if (!fs.existsSync(`emacs-${version}`)) {
 console.log("Current directory content:");
 fs.readdirSync(".");
 
-if (version === "23.2b") {
-  process.chdir(`emacs-23.2`);
+if (["23.2b", "21.4a"].indexOf(version) != -1) {
+  process.chdir(`emacs-${version.slice(0, -1)}`);
 } else {
   process.chdir(`emacs-${version}`);
 }
