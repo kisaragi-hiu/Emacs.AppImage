@@ -65,7 +65,7 @@ jobs:
       - name: Build Emacs
         run: node build-emacs.mjs ${{ matrix.emacs }}
       - name: Package AppImage
-        run: node appimage.mjs ${{ matrix.emacs }}
+        run: node package-appimage.mjs ${{ matrix.emacs }}
       - uses: actions/upload-artifact@v3
         with:
           name: built files ${{ matrix.emacs }}
