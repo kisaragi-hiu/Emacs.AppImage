@@ -14,9 +14,9 @@ jobs:
       matrix:
         emacs_version:
           - 28.1
-          # - 27.2
-          # - 26.3
-          # - 25.3
+          - 27.2
+          - 26.3
+          - 25.3
           # - 24.5
           - 24.1
           # "crt*.o not found"
