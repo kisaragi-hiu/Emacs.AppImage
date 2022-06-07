@@ -47,7 +47,7 @@ async function build(version) {
     toolkit = "gtk3";
   }
   if (VersionLessThan(version, "25")) {
-    spawnSync("sudo", ["apt-get", "-y", "install", "gcc-4.8"]);
+    spawnSync("sudo", ["apt-get", "-y", "install", "gcc-4.8", "libxpm-dev"]);
     extra_args = [...extra_args, "CC=gcc-4.8"];
   }
   if (VersionBetween("23", version, "24")) {
