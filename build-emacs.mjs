@@ -46,6 +46,10 @@ async function build(version) {
     extra_args = [...extra_args, "--with-native-compilation"];
     make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
+  if (VersionLessThanOrEqual("29", version)) {
+    // Emacs 29 adds native WebP support
+    await cmd("sudo", "apt-get", "-y", "install", "libwebp-dev");
+  }
   await cmd("ls");
   await cmd("./autogen.sh");
   await cmd(
