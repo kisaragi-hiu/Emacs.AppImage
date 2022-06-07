@@ -1,9 +1,6 @@
 import process from "node:process";
-import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
-import { VersionLessThanOrEqual } from "./version.mjs";
+import { VersionLessThanOrEqual, VersionLessThan } from "./version.mjs";
 import { cmd } from "./cmd.mjs";
 
 let version = process.argv[2];
