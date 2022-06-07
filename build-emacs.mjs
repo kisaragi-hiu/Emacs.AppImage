@@ -3,7 +3,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { VersionLessThanOrEqual, VersionLessThan } from "./version.mjs";
+import {
+  VersionLessThanOrEqual,
+  VersionLessThan,
+  VersionBetween,
+} from "./version.mjs";
 import { cmd } from "./cmd.mjs";
 
 function print_help() {
@@ -25,7 +29,7 @@ if (!version) {
 async function build(version) {
   let extra_args = [];
   let make_args = [];
-  let toolkit = "lucid";
+  let toolkit = "";
   // Emacs 23 / 24 need this
   spawnSync("sudo", [
     "apt-get",
@@ -35,14 +39,21 @@ async function build(version) {
     "libgif-dev",
     "libtiff-dev",
   ]);
-  // Emacs 22 adds GTK2 support
-  if (VersionLessThanOrEqual("22", version)) {
+  if (VersionLessThan(version, "22")) {
+    toolkit = "lucid";
+  } else if (VersionBetween("22", version, "24")) {
     toolkit = "gtk";
+  } else {
+    toolkit = "gtk3";
+  }
+  if (VersionBetween("23", version, "24")) {
+    extra_args = [...extra_args, "--with-gif=no", "--with-jpeg=no"];
+  } else if (VersionBetween("24", version, "25")) {
+    extra_args = [...extra_args, "--with-jpeg=no"];
   }
   // Emacs 24 adds GTK3 and SELinux support
   // We want SELinux to be off
   if (VersionLessThanOrEqual("24", version)) {
-    toolkit = "gtk3";
     extra_args = [...extra_args, "--without-selinux"];
   }
   // Emacs 25 adds native modules and xwidgets
@@ -67,14 +78,6 @@ async function build(version) {
   // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
     await cmd("sudo", "apt-get", "-y", "install", "libwebp-dev");
-  }
-  if (VersionLessThanOrEqual("23", version) && VersionLessThan(version, "24")) {
-    extra_args = [...extra_args, "--with-gif=no", "--with-jpeg=no"];
-  } else if (
-    VersionLessThanOrEqual("24", version) &&
-    VersionLessThan(version, "25")
-  ) {
-    extra_args = [...extra_args, "--with-jpeg=no"];
   }
   await cmd("ls");
   // Emacs <= 24.1 (not sure about 24.2~24.5) ship ./configure with
