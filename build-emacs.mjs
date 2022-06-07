@@ -65,15 +65,6 @@ async function build(version) {
   );
   await cmd("make", ...make_args);
 }
-
-if (!fs.existsSync(`emacs-${version}`)) {
-  spawnSync("wget", [
-    "-c",
-    `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`,
-  ]);
-  await cmd("tar", "xf", `emacs-${version}.tar.gz`);
-}
-
 console.log("Adding deb-src entries for apt-get build-dep");
 await cmd(
   "sudo",
@@ -83,13 +74,26 @@ await cmd(
   "/etc/apt/sources.list"
 );
 
-console.log("New /etc/apt/sources.list content:");
-await cmd("cat", "/etc/apt/sources.list");
-
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs-gtk"]);
 
-process.chdir(`emacs-${version}`);
+if (!fs.existsSync(`emacs-${version}`)) {
+  spawnSync("wget", [
+    "-c",
+    `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`,
+  ]);
+  await cmd("tar", "xf", `emacs-${version}.tar.gz`);
+}
+
+console.log("Current directory content:");
+fs.readdirSync(".");
+
+if (version === "23.2b") {
+  process.chdir(`emacs-23.2`);
+} else {
+  process.chdir(`emacs-${version}`);
+}
+
 await build(version);
 await cmd("sudo", "make", "install");
 process.chdir(`..`);
