@@ -91,7 +91,14 @@ await cmd(
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs-gtk"]);
 // Emacs 23 / 24 need this
-spawnSync("sudo", ["apt-get", "-y", "install", "libjpeg62-dev", "libgif-dev"]);
+spawnSync("sudo", [
+  "apt-get",
+  "-y",
+  "install",
+  "libjpeg62-dev",
+  "libgif-dev",
+  "libtiff-dev",
+]);
 
 if (!fs.existsSync(`emacs-${version}`)) {
   spawnSync("wget", [
