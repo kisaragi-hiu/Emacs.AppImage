@@ -59,6 +59,14 @@ async function build(version) {
   if (VersionLessThanOrEqual("29", version)) {
     await cmd("sudo", "apt-get", "-y", "install", "libwebp-dev");
   }
+  if (VersionLessThanOrEqual("23", version) && VersionLessThan(version, "24")) {
+    extra_args = [...extra_args, "--with-gif=no", "--with-jpeg=no"];
+  } else if (
+    VersionLessThanOrEqual("24", version) &&
+    VersionLessThan(version, "25")
+  ) {
+    extra_args = [...extra_args, "--with-jpeg=no"];
+  }
   await cmd("ls");
   // Emacs <= 24.1 (not sure about 24.2~24.5) ship ./configure with
   // the tarball and do not include ./autogen.sh.

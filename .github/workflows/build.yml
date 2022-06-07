@@ -14,6 +14,9 @@ jobs:
       matrix:
         emacs_version:
           - 28.1
+          # - 27.2
+          # - 26.3
+          # - 25.3
           # - 24.5
           - 24.1
           # "crt*.o not found"
@@ -29,12 +32,6 @@ jobs:
           # - 22.3
           # x86-64 supported was added in Emacs 22.
           # - 21.4a
-          # These build and launch fine, and are only commented out as
-          # I test other versions
-          #
-          # - 27.2
-          # - 26.3
-          # - 25.3
     steps:
       - uses: actions/checkout@v3
       - name: Build Emacs
