@@ -47,10 +47,26 @@ async function build(version) {
     toolkit = "gtk3";
   }
   if (VersionLessThan(version, "25")) {
-    spawnSync("sudo", ["apt-get", "-y", "install", "gcc-4.8", "libxpm-dev"]);
+    spawnSync("sudo", [
+      "apt-get",
+      "-y",
+      "install",
+      "gcc-4.8",
+      "libxpm-dev",
+      "libgtk-3-dev",
+    ]);
     extra_args = [...extra_args, "CC=gcc-4.8"];
   }
   if (VersionBetween("23", version, "24")) {
+    spawnSync("sudo", [
+      "apt-get",
+      "-y",
+      "install",
+      "libgconf2-dev",
+      "libgpm-dev",
+      "libm17n-dev",
+      "libotf-dev",
+    ]);
     extra_args = [...extra_args, "--with-crt-dir=/usr/lib/x86_64-linux-gnu"];
   }
   // Emacs 24 adds GTK3 and SELinux support
