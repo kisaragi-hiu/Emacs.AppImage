@@ -37,11 +37,11 @@ async function build(version) {
     toolkit = "lucid";
     extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
     extra_args = [...extra_args, "CC=gcc-4.8"];
-  } else if (VersionBetween("22", "23")) {
+  } else if (VersionBetween("22", version, "23")) {
     toolkit = "gtk";
     extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
     extra_args = [...extra_args, "CC=gcc-4.8"];
-  } else if (VersionBetween("23", "24")) {
+  } else if (VersionBetween("23", version, "24")) {
     toolkit = "gtk";
     extra_packages = [
       ...extra_packages,
@@ -59,7 +59,7 @@ async function build(version) {
       "--with-gif=no",
       "--with-crt-dir=/usr/lib/x86_64-linux-gnu",
     ];
-  } else if (VersionBetween("24", "25")) {
+  } else if (VersionBetween("24", version, "25")) {
     toolkit = "gtk3";
     extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
     extra_args = [...extra_args, "CC=gcc-4.8"];

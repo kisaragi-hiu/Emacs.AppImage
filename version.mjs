@@ -137,5 +137,6 @@ export function VersionLessThanOrEqual(v1, v2) {
 // Return true if A <= B < c
 // This allows 25, version, 27 to mean Emacs 25.* & 26.*
 export function VersionBetween(a, b, c) {
+  assert(a && b && c, "There must be three arguments");
   return VersionLessThanOrEqual(a, b) && VersionLessThan(b, c);
 }
