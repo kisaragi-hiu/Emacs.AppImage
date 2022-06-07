@@ -77,14 +77,9 @@ async function build(version) {
     extra_args = [...extra_args, "--without-selinux"];
   }
   // Emacs 25 adds native modules and xwidgets
-  // We'll figure out how to get xwidgets working later
   if (VersionLessThanOrEqual("25", version)) {
-    // await cmd("sudo", "apt-get", "-y", "install", "libwebkit2gtk-4.0");
-    extra_args = [
-      ...extra_args,
-      // "--with-xwidgets",
-      "--with-modules",
-    ];
+    await cmd("sudo", "apt-get", "-y", "install", "libwebkit2gtk-4.0");
+    extra_args = [...extra_args, "--with-xwidgets", "--with-modules"];
   }
   if (VersionLessThanOrEqual("27", version)) {
     extra_packages = [...extra_packages, "libjansson-dev"];
