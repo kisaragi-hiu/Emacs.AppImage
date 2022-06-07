@@ -7,16 +7,16 @@ import {
 } from "./version.mjs";
 import { cmd } from "./cmd.mjs";
 
-let version = process.argv[2];
-if (!version) {
+let v = process.argv[2];
+if (!v) {
   process.exit(1);
 }
 let APP = "Emacs";
 
 let excludelist = "";
-if (VersionBetween("25", version, "26")) {
+if (VersionBetween("25", v, "26")) {
   excludelist = "package/excludelist_25";
-} else if (VersionBetween("26", version, "29")) {
+} else if (VersionBetween("26", v, "29")) {
   excludelist = "package/excludelist_26_27_28";
 } else {
   excludelist = "package/excludelist_empty";
@@ -55,7 +55,7 @@ sed -i -e 's|/usr|././|g' $BINARY
 sed -i -e 's|/app|././|g' $BINARY
 
 ${
-  VersionBetween("23", version, "25")
+  VersionBetween("23", v, "25")
     ? `
     mkdir -p lib
     cp /lib/x86_64-linux-gnu/*.so* ./lib/
@@ -74,7 +74,7 @@ copy_deps
 delete_blacklisted ${excludelist}
 rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
-VERSION="${version}"
+VERSION="${v}"
 
 (
  cd usr/bin/

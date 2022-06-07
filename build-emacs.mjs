@@ -19,9 +19,9 @@ See http://ftpmirror.gnu.org/emacs/ for a list of all versions.
 `);
 }
 
-let version = process.argv[2];
+let v = process.argv[2];
 
-if (!version) {
+if (!v) {
   print_help();
   process.exit(1);
 }
@@ -128,23 +128,20 @@ await cmd(
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
-if (!fs.existsSync(`emacs-${version}`)) {
-  spawnSync("wget", [
-    "-c",
-    `http://ftpmirror.gnu.org/emacs/emacs-${version}.tar.gz`,
-  ]);
-  await cmd("tar", "xf", `emacs-${version}.tar.gz`);
+if (!fs.existsSync(`emacs-${v}`)) {
+  spawnSync("wget", ["-c", `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`]);
+  await cmd("tar", "xf", `emacs-${v}.tar.gz`);
 }
 
 console.log("Current directory content:");
 fs.readdirSync(".");
 
-if (["23.2b", "21.4a"].indexOf(version) != -1) {
-  process.chdir(`emacs-${version.slice(0, -1)}`);
+if (["23.2b", "21.4a"].indexOf(v) != -1) {
+  process.chdir(`emacs-${v.slice(0, -1)}`);
 } else {
-  process.chdir(`emacs-${version}`);
+  process.chdir(`emacs-${v}`);
 }
 
-await build(version);
+await build(v);
 await cmd("sudo", "make", "install");
 process.chdir(`..`);
