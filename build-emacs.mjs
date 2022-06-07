@@ -78,7 +78,7 @@ async function build(version) {
   }
   // Emacs 25 adds native modules and xwidgets
   if (VersionLessThanOrEqual("25", version)) {
-    await cmd("sudo", "apt-get", "-y", "install", "libwebkit2gtk-4.0");
+    extra_packages = [...extra_packages, "libwebkit2gtk-4.0-dev"];
     extra_args = [...extra_args, "--with-xwidgets", "--with-modules"];
   }
   if (VersionLessThanOrEqual("27", version)) {
