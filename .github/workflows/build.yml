@@ -24,22 +24,34 @@ jobs:
             os: ubuntu-20.04
           - emacs: 24.5
             os: ubuntu-18.04
-          - emacs: 24.1
-            os: ubuntu-18.04
-          # "crt*.o not found"
-          # This probably needs GCC 4.8.
-          - emacs: 23.4
-            os: ubuntu-18.04
-          - emacs: 23.2b
-            os: ubuntu-18.04
+          #  In file included from ../src/config.h:1430:0,
+          #                   from md5.c:23:
+          # ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
+          #  _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+          # - emacs: 24.1
+          #   os: ubuntu-18.04
+          #
+          # /build/glibc-CVJwZb/glibc-2.27/nptl/pthread_atfork.c:51: undefined reference to `__dso_handle'
+          # /usr/bin/ld: temacs: hidden symbol `__dso_handle' isn't defined
+          #
+          # ???
+          # - emacs: 23.4
+          #   os: ubuntu-18.04
+          #
+          # make'ing temacs for some reason ends up with this flag:
+          #   "-I/usr/include/gio-1 -2.0/"
+          # with predictable results.
+          # - emacs: 23.2b
+          #   os: ubuntu-18.04
+          #
           # This probably needs Make 3.81. It relies on some
           # deprecated behavior.
-          #
           # https://stackoverflow.com/questions/34562221
           # https://github.com/mirror/make/blob/master/NEWS
           # - os: ubuntu-18.04
           #   emacs: 22.3
-          # x86-64 supported was added in Emacs 22.
+          #
+          # x86-64 support was added in Emacs 22.
           # - os: ubuntu-18.04
           #   emacs: 21.4a
     runs-on: ${{ matrix.os }}
