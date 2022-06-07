@@ -60,9 +60,9 @@ async function build(version) {
     extra_args = [...extra_args, "--with-cairo", "--with-harfbuzz"];
   }
   if (VersionLessThanOrEqual("28", version)) {
-    await cmd("sudo", "apt-get", "-y", "install", "libgccjit-9-dev");
-    extra_args = [...extra_args, "--with-native-compilation"];
-    make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
+    // await cmd("sudo", "apt-get", "-y", "install", "libgccjit-9-dev");
+    // extra_args = [...extra_args, "--with-native-compilation"];
+    // make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
   // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
