@@ -25,11 +25,19 @@ if (!version) {
 async function build(version) {
   let extra_args = [];
   let make_args = [];
-  let toolkit = "gtk";
+  let toolkit = "lucid";
+  // Emacs 22 adds GTK2 support
+  if (VersionLessThanOrEqual("22", version)) {
+    toolkit = "gtk";
+  }
+  // Emacs 24 adds GTK3 and SELinux support
+  // We want SELinux to be off
   if (VersionLessThanOrEqual("24", version)) {
     toolkit = "gtk3";
     extra_args = [...extra_args, "--without-selinux"];
   }
+  // Emacs 25 adds native modules and xwidgets
+  // We'll figure out how to get xwidgets working later
   if (VersionLessThanOrEqual("25", version)) {
     // await cmd("sudo", "apt-get", "-y", "install", "libwebkit2gtk-4.0");
     extra_args = [
@@ -47,8 +55,8 @@ async function build(version) {
     extra_args = [...extra_args, "--with-native-compilation"];
     make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   }
+  // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
-    // Emacs 29 adds native WebP support
     await cmd("sudo", "apt-get", "-y", "install", "libwebp-dev");
   }
   await cmd("ls");
@@ -56,6 +64,9 @@ async function build(version) {
   // the tarball and do not include ./autogen.sh.
   if (fs.existsSync("./autogen.sh")) {
     await cmd("./autogen.sh");
+  }
+  if (toolkit === "gtk") {
+    cmd("sudo", "apt-get", "-y", "install", "libgtk2.0-dev", "libglib2.0-dev");
   }
   await cmd(
     "./configure",
@@ -77,6 +88,8 @@ await cmd(
 
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs-gtk"]);
+// Emacs 24 needs this
+spawnSync("sudo", ["apt-get", "-y", "install", "libjpeg-dev", "libgif-dev"]);
 
 if (!fs.existsSync(`emacs-${version}`)) {
   spawnSync("wget", [

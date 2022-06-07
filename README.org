@@ -6,9 +6,14 @@ AppImages are built on GitHub Actions and distributed
 
 I used https://github.com/probonopd/Emacs.AppImage as a starting point.
 
-* TODO Emacs 27 pdmp isn't being loaded properly
-* TODO Also build for 25, 24, 23, 22
 * TODO Also build for other minor versions
 * TODO Enable xwidgets
 
 Needs [[https://packages.ubuntu.com/focal/libwebkit2gtk-4.0-dev][libwebkit2gtk-4.0-dev]]
+
+* TODO Emacs 27 pdmp isn't being loaded properly
+* TODO Emacs <= 23
+
+These need GCC 4.8, it seems.
+
+cf. https://qiita.com/eurogrve/items/fcb15556bb29289db63e
