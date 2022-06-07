@@ -57,7 +57,11 @@ sed -i -e 's|/app|././|g' $BINARY
 ## Copy desktop and icon file to AppDir for AppRun to pick them up
 cp ${AppRun} .
 chmod a+x ./AppRun
-get_desktop
+
+### eg. emacs.desktop -> emacs-27.2.desktop + edit name "Emacs" to "Emacs 27.2"
+for FILE in $(find usr/share/applications -iname "*${LOWERAPP}.desktop"); do
+  sed 's/Name=Emacs/Name=Emacs ${v}/' "$FILE" > "$(basename "$FILE" .desktop)"-${v}.desktop
+done
 get_icon
 
 ## Copy dependencies then delete stuff that should not be bundled
