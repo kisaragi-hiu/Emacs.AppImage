@@ -26,6 +26,15 @@ async function build(version) {
   let extra_args = [];
   let make_args = [];
   let toolkit = "lucid";
+  // Emacs 23 / 24 need this
+  spawnSync("sudo", [
+    "apt-get",
+    "-y",
+    "install",
+    "libjpeg-dev",
+    "libgif-dev",
+    "libtiff-dev",
+  ]);
   // Emacs 22 adds GTK2 support
   if (VersionLessThanOrEqual("22", version)) {
     toolkit = "gtk";
@@ -97,16 +106,7 @@ await cmd(
 );
 
 spawnSync("sudo", ["apt-get", "update"]);
-spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs-gtk"]);
-// Emacs 23 / 24 need this
-spawnSync("sudo", [
-  "apt-get",
-  "-y",
-  "install",
-  "libjpeg62-dev",
-  "libgif-dev",
-  "libtiff-dev",
-]);
+spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
 if (!fs.existsSync(`emacs-${version}`)) {
   spawnSync("wget", [
