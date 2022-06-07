@@ -22,11 +22,12 @@ if (!version) {
   process.exit(1);
 }
 
-let extra_args = [];
-let make_args = [];
-
 async function build(version) {
+  let extra_args = [];
+  let make_args = [];
+  let toolkit = "gtk";
   if (VersionLessThanOrEqual("24", version)) {
+    toolkit = "gtk3";
     extra_args = [...extra_args, "--without-selinux"];
   }
   if (VersionLessThanOrEqual("25", version)) {
@@ -59,7 +60,7 @@ async function build(version) {
   await cmd(
     "./configure",
     "--prefix=/app",
-    "--with-x-toolkit=gtk3",
+    `--with-x-toolkit=${toolkit}`,
     "--with-xft",
     ...extra_args
   );
