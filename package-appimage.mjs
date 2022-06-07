@@ -59,7 +59,7 @@ cp ${AppRun} .
 chmod a+x ./AppRun
 
 ### eg. emacs.desktop -> emacs-27.2.desktop + edit name "Emacs" to "Emacs 27.2"
-for FILE in $(find usr/share/applications -iname "*${LOWERAPP}.desktop"); do
+for FILE in $(find usr/share/applications -iname "*$\{LOWERAPP}.desktop"); do
   sed 's/Name=Emacs/Name=Emacs ${v}/' "$FILE" > "$(basename "$FILE" .desktop)"-${v}.desktop
 done
 get_icon
