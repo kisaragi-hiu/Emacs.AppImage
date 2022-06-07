@@ -1,6 +1,10 @@
 import process from "node:process";
 import path from "node:path";
-import { VersionLessThanOrEqual, VersionLessThan } from "./version.mjs";
+import {
+  VersionLessThanOrEqual,
+  VersionLessThan,
+  VersionBetween,
+} from "./version.mjs";
 import { cmd } from "./cmd.mjs";
 
 let version = process.argv[2];
@@ -10,13 +14,12 @@ if (!version) {
 let APP = "Emacs";
 
 let excludelist = "";
-if (VersionLessThanOrEqual("25", version) && VersionLessThan(version, "26")) {
+if (VersionBetween("25", version, "26")) {
   excludelist = "package/excludelist_25";
-} else if (
-  VersionLessThanOrEqual("26", version) &&
-  VersionLessThan(version, "28")
-) {
+} else if (VersionBetween("26", version, "28")) {
   excludelist = "package/excludelist_26_27";
+} else if (VersionBetween("28", version, "29")) {
+  excludelist = "package/excludelist_28";
 } else {
   excludelist = "package/excludelist_empty";
 }
