@@ -2,24 +2,9 @@ import process from "node:process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { spawn, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { VersionLessThanOrEqual } from "./version.mjs";
-
-function cmd(...command) {
-  console.log(command);
-  let p = spawn(command[0], command.slice(1));
-  return new Promise((resolveFunc) => {
-    p.stdout.on("data", (x) => {
-      process.stdout.write(x.toString());
-    });
-    p.stderr.on("data", (x) => {
-      process.stderr.write(x.toString());
-    });
-    p.on("exit", (code) => {
-      resolveFunc(code);
-    });
-  });
-}
+import { cmd } from "./cmd.mjs";
 
 function print_help() {
   console.log(`
@@ -103,4 +88,4 @@ process.chdir(`..`);
 fs.copyFileSync("AppRun", path.join(os.homedir(), "AppRun"));
 
 // This should put the finished AppImage in ./build/Emacs/out/
-await cmd("bash", "-ex", "appimage.sh", version);
+await cmd("node", "appimage.mjs", version);

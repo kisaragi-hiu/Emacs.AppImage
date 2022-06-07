@@ -119,24 +119,25 @@ move_lib() {
 
 # Delete blacklisted files
 delete_blacklisted() {
-	# BLACKLISTED_FILES=$(cat package/excludelist | sed '/#.*/d')
-	# echo $BLACKLISTED_FILES
+	local excludelist="$1"
+	BLACKLISTED_FILES=$(cat "$excludelist" | sed '/#.*/d')
+	echo $BLACKLISTED_FILES
 
-	# local DOT_DIR=$(readlink -f .)
-	# local TARGET
-	# for FILE in $BLACKLISTED_FILES; do
-	# 	FILES="$(find . -name "${FILE}" -not -path "./usr/optional/*")"
-	# 	for FOUND in $FILES; do
-	# 		TARGET=$(readlink -f "$FOUND")
+	local DOT_DIR=$(readlink -f .)
+	local TARGET
+	for FILE in $BLACKLISTED_FILES; do
+		FILES="$(find . -name "${FILE}" -not -path "./usr/optional/*")"
+		for FOUND in $FILES; do
+			TARGET=$(readlink -f "$FOUND")
 
-	# 		# Only delete files from inside the current dir.
-	# 		if [[ $TARGET = $DOT_DIR/* ]]; then
-	# 			rm -vf "$TARGET"
-	# 		fi
+			# Only delete files from inside the current dir.
+			if [[ $TARGET = $DOT_DIR/* ]]; then
+				rm -vf "$TARGET"
+			fi
 
-	# 		rm -vf "$FOUND"
-	# 	done
-	# done
+			rm -vf "$FOUND"
+		done
+	done
 
 	# Do not bundle developer stuff
 	rm -rf usr/include || true
