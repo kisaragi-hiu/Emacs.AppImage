@@ -119,8 +119,7 @@ move_lib() {
 
 # Delete blacklisted files
 delete_blacklisted() {
-	BLACKLISTED_FILES=$(cat_file_from_url https://github.com/AppImage/pkg2appimage/raw/${PKG2AICOMMIT}/excludelist | sed '/#.*/d' |
-		sed '/libpango/d')
+	BLACKLISTED_FILES=$(cat package/excludelist | sed '/#.*/d')
 	echo $BLACKLISTED_FILES
 
 	local DOT_DIR=$(readlink -f .)
