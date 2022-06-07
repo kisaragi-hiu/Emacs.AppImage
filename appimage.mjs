@@ -16,10 +16,8 @@ let APP = "Emacs";
 let excludelist = "";
 if (VersionBetween("25", version, "26")) {
   excludelist = "package/excludelist_25";
-} else if (VersionBetween("26", version, "28")) {
-  excludelist = "package/excludelist_26_27";
-} else if (VersionBetween("28", version, "29")) {
-  excludelist = "package/excludelist_28";
+} else if (VersionBetween("26", version, "29")) {
+  excludelist = "package/excludelist_26_27_28";
 } else {
   excludelist = "package/excludelist_empty";
 }

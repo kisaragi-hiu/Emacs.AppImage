@@ -15,13 +15,13 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point.
 - 27 :: Usable. Next: fix pdmp loading & enable xwidgets
 - 28 :: TODO
 
-** TODO Figure out which libraries to exclude for Emacs 28
+** TODO Emacs 27 pdmp isn't being loaded properly
+** TODO Enable native compilation for 28 (probably requires pdmp to work properly)
 ** TODO Also build for other minor versions
 ** TODO Enable xwidgets
 
 Needs [[https://packages.ubuntu.com/focal/libwebkit2gtk-4.0-dev][libwebkit2gtk-4.0-dev]]
 
-** TODO Emacs 27 pdmp isn't being loaded properly
 ** TODO Emacs <= 23
 
 These need GCC 4.8, it seems.
