@@ -8,8 +8,15 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point.
 
 - 21 :: no support for x86-64
 - 22 :: Make returns error; probably needs ancient Make
-- 23 :: “crt*.o not found”; probably needs GCC 4.8
-- 24 :: libgif issue
+- 23.2b ::
+  : gcc-4.8: error: unrecognized command line option ‘-2.0/’
+- 23.4 ::
+  : /usr/lib/x86_64-linux-gnu/libpthread_nonshared.a(pthread_atfork.oS): In function `__pthread_atfork':
+  : /build/glibc-CVJwZb/glibc-2.27/nptl/pthread_atfork.c:51: undefined reference to `__dso_handle'
+  : /usr/bin/ld: temacs: hidden symbol `__dso_handle' isn't defined
+- 24 ::
+  : ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
+  : _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
 - 25 :: Usable. Next: enable xwidgets
 - 26 :: Usable. Next: enable xwidgets
 - 27 :: Usable. Next: fix pdmp loading & enable xwidgets
