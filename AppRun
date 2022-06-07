@@ -7,5 +7,5 @@ export EMACSPATH=${HERE}/usr/share/emacs/$VER/
 export EMACSDATA=$EMACSPATH/etc
 export EMACSDOC=$EMACSPATH/etc
 export EMACSLOADPATH=$EMACSPATH/site-lisp:$EMACSPATH/lisp:$EMACSPATH/lisp/emacs-lisp
-export INFOPATH=./local/share/info
+export INFOPATH=${HERE}/usr/share/info
 "${HERE}"/usr/bin/emacs "$@"
