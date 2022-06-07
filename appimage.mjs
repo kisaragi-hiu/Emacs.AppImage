@@ -17,6 +17,8 @@ if (VersionLessThanOrEqual("25", version) && VersionLessThan(version, "26")) {
 }
 excludelist = path.resolve(excludelist);
 
+let AppRun = path.resolve("AppRun");
+
 await cmd(
   "bash",
   "-ex",
@@ -47,7 +49,7 @@ sed -i -e 's|/usr|././|g' $BINARY
 sed -i -e 's|/app|././|g' $BINARY
 
 ## Copy desktop and icon file to AppDir for AppRun to pick them up
-cp ~/AppRun .
+cp ${AppRun} .
 chmod a+x ./AppRun
 get_desktop
 get_icon

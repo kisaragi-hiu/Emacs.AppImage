@@ -23,8 +23,10 @@ jobs:
           # - 21.4a
     steps:
       - uses: actions/checkout@v3
-      - name: Build AppImage
+      - name: Build Emacs
         run: node build-emacs.mjs ${{ matrix.emacs_version }}
+      - name: Package AppImage
+        run: node appimage.mjs ${{ matrix.emacs_version }}
       - uses: actions/upload-artifact@v3
         with:
           name: built files ${{ matrix.emacs_version }}
