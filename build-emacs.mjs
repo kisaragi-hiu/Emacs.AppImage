@@ -67,7 +67,12 @@ async function build(version) {
       "libm17n-dev",
       "libotf-dev",
     ]);
-    extra_args = [...extra_args, "--with-crt-dir=/usr/lib/x86_64-linux-gnu"];
+    extra_args = [
+      ...extra_args,
+      // image.c:7540:3: error: too few arguments to function ‘DGifCloseFile’
+      "--with-gif=no",
+      "--with-crt-dir=/usr/lib/x86_64-linux-gnu",
+    ];
   }
   // Emacs 24 adds GTK3 and SELinux support
   // We want SELinux to be off
