@@ -59,3 +59,5 @@ jobs:
           name: built files ${{ matrix.emacs }}
           path: build/out/*.AppImage*
           if-no-files-found: error
+          # When things actually work we will upload them to Releases
+          retention-days: 1
