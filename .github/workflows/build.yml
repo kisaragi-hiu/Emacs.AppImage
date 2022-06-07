@@ -43,7 +43,7 @@ jobs:
           # x86-64 supported was added in Emacs 22.
           # - os: ubuntu-18.04
           #   emacs: 21.4a
-    runs-on: {{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
