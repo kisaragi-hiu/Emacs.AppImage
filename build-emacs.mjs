@@ -61,7 +61,13 @@ async function build(version) {
     ];
   } else if (VersionBetween("24", version, "25")) {
     toolkit = "gtk3";
-    extra_packages = [...extra_packages, "gcc-4.8", "libxpm-dev"];
+    extra_packages = [
+      ...extra_packages,
+      "gcc-4.8",
+      "libxpm-dev",
+      "libnss-myhostname",
+    ];
+
     extra_args = [...extra_args, "CC=gcc-4.8"];
   }
   // Emacs 24 adds GTK3 and SELinux support

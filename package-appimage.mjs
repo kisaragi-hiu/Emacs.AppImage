@@ -71,15 +71,6 @@ rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
 VERSION="${v}"
 
-${
-  VersionBetween("23", v, "25")
-    ? `
-    mkdir -p lib
-    cp /lib/x86_64-linux-gnu/*.so* ./lib/
-    `
-    : ""
-}
-
 (
  cd usr/bin/
  rm emacs
