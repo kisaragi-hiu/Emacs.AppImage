@@ -6,7 +6,7 @@
 # For more information, see http://appimage.org/
 ########################################################################
 
-export ARCH=$(arch)
+export ARCH=$(uname -m)
 
 APP=Emacs
 LOWERAPP=${APP,,}
