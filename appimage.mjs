@@ -54,15 +54,6 @@ BINARY=$(find ./usr/bin/ -name emacs* -type f -executable | head -n 1)
 sed -i -e 's|/usr|././|g' $BINARY
 sed -i -e 's|/app|././|g' $BINARY
 
-${
-  VersionBetween("23", v, "25")
-    ? `
-    mkdir -p lib
-    cp /lib/x86_64-linux-gnu/*.so* ./lib/
-    `
-    : ""
-}
-
 ## Copy desktop and icon file to AppDir for AppRun to pick them up
 cp ${AppRun} .
 chmod a+x ./AppRun
@@ -75,6 +66,15 @@ delete_blacklisted ${excludelist}
 rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
 VERSION="${v}"
+
+${
+  VersionBetween("23", v, "25")
+    ? `
+    mkdir -p lib
+    cp /lib/x86_64-linux-gnu/*.so* ./lib/
+    `
+    : ""
+}
 
 (
  cd usr/bin/
