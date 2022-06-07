@@ -59,7 +59,7 @@ copy_deps
 delete_blacklisted ${excludelist}
 rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
-VERSION="$1"
+VERSION="${version}"
 
 (
  cd usr/bin/
