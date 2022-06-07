@@ -17,10 +17,10 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point.
 - 24 ::
   : ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
   : _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-- 25 :: Usable. Next: enable xwidgets
-- 26 :: Usable. Next: enable xwidgets
-- 27 :: Usable. Next: fix pdmp loading & enable xwidgets
-- 28 :: TODO
+- 25 :: Usable. (xwidgets turned off)
+- 26 :: Usable.
+- 27 :: Usable. Next: fix pdmp
+- 28 :: Usable. Next: fix pdmp, enable native compilation
 
 ** TODO Emacs 27 pdmp isn't being loaded properly
 ** TODO Enable native compilation for 28 (probably requires pdmp to work properly)

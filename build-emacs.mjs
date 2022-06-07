@@ -76,10 +76,15 @@ async function build(version) {
     toolkit = "gtk3";
     extra_args = [...extra_args, "--without-selinux"];
   }
-  // Emacs 25 adds native modules and xwidgets
+  // Emacs 25 adds native modules
+  // Emacs 25 also adds xwidgets, but it seems to be demanding a
+  // version of WebKitGTK that's too old, so only enable it in 26.
   if (VersionLessThanOrEqual("25", version)) {
+    extra_args = [...extra_args, "--with-modules"];
+  }
+  if (VersionLessThanOrEqual("26", version)) {
     extra_packages = [...extra_packages, "libwebkit2gtk-4.0-dev"];
-    extra_args = [...extra_args, "--with-xwidgets", "--with-modules"];
+    extra_args = [...extra_args, "--with-xwidgets"];
   }
   if (VersionLessThanOrEqual("27", version)) {
     extra_packages = [...extra_packages, "libjansson-dev"];
