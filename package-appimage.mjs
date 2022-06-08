@@ -71,6 +71,11 @@ rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
 VERSION="${v}"
 
+# mkdir -p ./lib/x86_64-linux-gnu/webkit2gtk-4.0
+if [ -d "/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0" ]; then
+  cp -r /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0 ./lib/x86_64-linux-gnu/
+fi
+
 (
  cd usr/bin/
  rm emacs
