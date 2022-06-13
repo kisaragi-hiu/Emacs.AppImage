@@ -72,4 +72,4 @@ jobs:
           path: build/out/*.AppImage*
           if-no-files-found: error
           # When things actually work we will upload them to Releases
-          retention-days: 1
+          retention-days: 7
