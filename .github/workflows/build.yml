@@ -72,17 +72,18 @@ jobs:
         run: node build-emacs.mjs ${{ matrix.emacs }}
       - name: Package AppImage
         run: node package-appimage.mjs ${{ matrix.emacs }}
-      - uses: actions/upload-artifact@v3
+      - uses: svenstaro/upload-release-action@v2
+        if: startsWith(github.ref, 'refs/tags')
         with:
-          name: built files ${{ matrix.emacs }}
-          path: |
-            build/out/*.AppImage
-            build/out/*.AppImage.zsync
-          if-no-files-found: error
-          # When things actually work we will upload them to Releases
-          retention-days: 7
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   if: startsWith(github.ref, 'refs/tags')
+          file_glob: true
+          file: build/out/*.AppImage*
+          prerelease: true
+      # - uses: actions/upload-artifact@v3
       #   with:
-      #     files: build/out/*.AppImage*
+      #     name: built files ${{ matrix.emacs }}
+      #     path: |
+      #       build/out/*.AppImage
+      #       build/out/*.AppImage.zsync
+      #     if-no-files-found: error
+      #     # When things actually work we will upload them to Releases
+      #     retention-days: 7

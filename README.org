@@ -27,7 +27,6 @@ Status (tested on Arch Linux):
 - 21 :: no support for x86-64
 
 ** Todos
-- Upload to release (perhaps with [[https://github.com/svenstaro/upload-release-action]])
 - Emacs 27 pdmp isn't being loaded properly
 - Enable native compilation for 28 (probably requires pdmp to work properly)
 - Also build for other minor versions
