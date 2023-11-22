@@ -66,6 +66,8 @@ async function build(version) {
   let make_args = [];
   let toolkit = "";
   let extra_packages = [];
+  // // Disable the version of "movemail" provided by Emacs
+  extra_args = ["--with-mailutils"];
   // Emacs 23 / 24 need this
   extra_packages = ["libjpeg-dev", "libgif-dev", "libtiff-dev"];
   if (VersionLessThan(version, "22")) {
@@ -161,6 +163,7 @@ async function build(version) {
     "ac_cv_lib_gif_EGifPutExtensionLast=yes",
     "./configure",
     "--prefix=/app",
+    "--libexecdir=/app/lib",
     `--with-x-toolkit=${toolkit}`,
     "--with-xft",
     ...extra_args,
