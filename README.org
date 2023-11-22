@@ -1,13 +1,14 @@
 * AppImages for Emacs
 
-AppImages for many versions of Emacs\*\*.
+AppImages for many versions of Emacs, including the latest.
 
-AppImages are built on GitHub Actions and distributed
+AppImages are built on GitHub Actions and +distributed in Releases+ (not done yet).
 
-I used https://github.com/probonopd/Emacs.AppImage as a starting point.
+I used https://github.com/probonopd/Emacs.AppImage as a starting point, and will probably apply [[https://github.com/purcell/nix-emacs-ci/tree/master/patches][the patches from purcell/nix-emacs-ci]].
 
-- 28 :: Usable. Next: fix pdmp, enable native compilation
-- 27 :: Usable. Next: fix pdmp
+- 29 :: Unknown
+- 28 :: Usable but without pdump or native compilation.
+- 27 :: Usable but without pdump.
 - 26 :: Usable.
 - 25 :: Usable. (xwidgets turned off)
 - 24 ::
