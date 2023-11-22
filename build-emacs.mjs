@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 import {
   VersionLessThanOrEqual,
+  VersionEqual,
   VersionLessThan,
   VersionBetween,
 } from "./version.mjs";
@@ -22,6 +23,42 @@ let v = process.argv[2];
 if (!v) {
   print_help();
   process.exit(1);
+}
+
+// Ported from https://github.com/purcell/nix-emacs-ci/blob/master/emacs.nix
+/** Return the patch files applicable for `version`. */
+function patches(version) {
+  let files = [];
+  if (VersionEqual("23.4", version)) {
+    files = [...files, "all-dso-handle.patch", "fpending-23.4.patch"];
+  }
+  if (VersionEqual("24.1", version)) {
+    files = [
+      ...files,
+      "gnutls-e_again-old-emacsen.patch",
+      "all-dso-handle.patch",
+      "remove-old-gets-warning.patch",
+      "fpending-24.1.patch",
+    ];
+  }
+  if (VersionEqual("24.2", version)) {
+    files = [
+      ...files,
+      "gnutls-e_again-old-emacsen.patch",
+      "all-dso-handle.patch",
+      "fpending-24.1.patch",
+    ];
+  }
+  if (VersionEqual("24.3", version)) {
+    files = [...files, "all-dso-handle.patch", "fpending-24.3.patch"];
+  }
+  if (VersionBetween("24.3", version, "26.3")) {
+    files = [...files, "gnutls-e_again.patch"];
+  }
+  if (VersionBetween("25.1", version, "28.1")) {
+    files = [...files, "sigsegv-stack.patch"];
+  }
+  return files;
 }
 
 async function build(version) {
@@ -142,10 +179,12 @@ await cmd(
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
+console.log("Downloading Emacs tarball...");
 if (!fs.existsSync(`emacs-${v}`)) {
   spawnSync("wget", ["-c", `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`]);
   await cmd("tar", "xf", `emacs-${v}.tar.gz`);
 }
+console.log("Downloading Emacs tarball...done");
 
 console.log("Current directory content:");
 fs.readdirSync(".");
@@ -154,6 +193,16 @@ if (["23.2b", "21.4a"].indexOf(v) != -1) {
   process.chdir(`emacs-${v.slice(0, -1)}`);
 } else {
   process.chdir(`emacs-${v}`);
+}
+
+console.log("Applying patches");
+for (const patch of patches(v)) {
+  await cmd(
+    "patch",
+    "-N",
+    "--strip=1",
+    `--input=./nix-emacs-ci/patches/${patch}`,
+  );
 }
 
 await build(v);
