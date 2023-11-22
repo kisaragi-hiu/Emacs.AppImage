@@ -10,7 +10,8 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point, and will
 - 28 :: Usable but without pdump or native compilation.
 - 27 :: Usable but without pdump.
 - 26 :: Usable.
-- 25 :: Usable. (xwidgets turned off)
+- 25 :: 
+  : symbol lookup error: /usr/lib/libtiff.so.6: undefined symbol: jpeg12_write_raw_data, version LIBJPEG_8.0
 - 24 ::
   : ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
   : _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
