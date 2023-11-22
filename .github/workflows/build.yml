@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "!*.org"
 
 jobs:
   "build":
@@ -26,8 +24,8 @@ jobs:
             os: ubuntu-20.04
           - emacs: 25.3
             os: ubuntu-20.04
-          - emacs: 24.5
-            os: ubuntu-18.04
+          # - emacs: 24.5
+          #   os: ubuntu-18.04
           #  In file included from ../src/config.h:1430:0,
           #                   from md5.c:23:
           # ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
