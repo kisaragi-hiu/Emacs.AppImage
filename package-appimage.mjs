@@ -89,10 +89,10 @@ fi
 )
 
 # Package
-cd .. # Go out of AppDir
+cd .. # Go out of AppDir. We're in build/ right now
 mkdir -p ../out/
 UPINFO="gh-releases-zsync|kisaragi-hiu|Emacs.AppImage|latest|Emacs-*x86_64.AppImage.zsync"
-./appimagetool -u STRING -v $APP.AppDir
+../appimagetool -u "$UPINFO" -v $APP.AppDir
 mv *.AppImage* ../out/ # this includes the zsync file
 
 # readlink prints "the value of a symbolic link or canonical file name"
