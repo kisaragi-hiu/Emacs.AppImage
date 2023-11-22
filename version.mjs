@@ -1,6 +1,6 @@
 /** Version comparison functions. */
 
-import assert from "assert/strict";
+import assert from "node:assert/strict";
 
 let separator = ".";
 
@@ -115,13 +115,13 @@ function VersionListEqual(l1, l2) {
     l2 = l2.slice(1);
   }
   if (l1.length != 0 && l2.length != 0) {
-    return l1[0] === l2[0];
-  } else if (l1.length === 0 && l2.length === 0) {
     return false;
+  } else if (l1.length === 0 && l2.length === 0) {
+    return true;
   } else if (l1.length != 0) {
-    return VersionListNotZero(l1) === 0;
+    return VersionListNotZero(l1) <= 0;
   } else {
-    return VersionListNotZero(l2) === 0;
+    return 0 <= VersionListNotZero(l2);
   }
 }
 
