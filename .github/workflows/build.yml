@@ -60,6 +60,9 @@ jobs:
           #   emacs: 21.4a
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Install libfuse2 to work around AppImages needing FUSE2
+        run: |
+          sudo apt install libfuse2
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
