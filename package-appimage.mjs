@@ -25,6 +25,7 @@ excludelist = path.resolve(excludelist);
 
 let AppRun = path.resolve("AppRun");
 
+// Based on https://github.com/probonopd/Emacs.AppImage/blob/master/appimage.sh
 await cmd(
   "bash",
   "-ex",
@@ -36,6 +37,11 @@ APP=${APP}
 LOWERAPP=${APP.toLowerCase()}
 GIT_REV=$(git rev-parse --short HEAD)
 echo $GIT_REV
+
+echo "Downloading appimagetool..."
+wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+chmod a+x appimagetool
+echo "Downloading appimagetool...done"
 
 # wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
 . ./package/functions.sh
@@ -85,7 +91,12 @@ fi
 # Package
 cd .. # Go out of AppDir
 mkdir -p ../out/
-generate_type2_appimage
+UPINFO="gh-releases-zsync|kisaragi-hiu|Emacs.AppImage|latest|Emacs-*x86_64.AppImage.zsync"
+./appimagetool -u STRING -v $APP.AppDir
+mv *.AppImage* ../out/ # this includes the zsync file
+
+# readlink prints "the value of a symbolic link or canonical file name"
+# added this because I could never remember what "readlink" is doing here
 readlink -f ../out/*.AppImage*
 `,
 );

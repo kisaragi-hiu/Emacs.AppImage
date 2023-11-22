@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "!*.org"
 
 jobs:
   "build":
@@ -69,7 +71,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: built files ${{ matrix.emacs }}
-          path: build/out/*.AppImage*
+          path: |
+            build/out/*.AppImage
+            build/out/*.AppImage.zsync
           if-no-files-found: error
           # When things actually work we will upload them to Releases
           retention-days: 7
