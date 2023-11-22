@@ -1,0 +1,3 @@
+[submodule "nix-emacs-ci"]
+	path = nix-emacs-ci
+	url = https://github.com/purcell/nix-emacs-ci
