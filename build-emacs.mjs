@@ -68,6 +68,7 @@ async function build(version) {
 
     extra_args = [...extra_args, "CC=gcc-4.8"];
   }
+
   // Emacs 24 adds GTK3 and SELinux support
   // We want SELinux to be off
   if (VersionLessThanOrEqual("24", version)) {
@@ -95,7 +96,16 @@ async function build(version) {
   }
   // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
-    // extra_packages = [...extra_packages, "libwebp-dev"];
+    extra_packages = [
+      ...extra_packages,
+      "libwebp-dev",
+      "libsqlite3-dev",
+      // This is added in Ubuntu 22.04, whereas other cases assume
+      // Ubuntu 20.04. I've checked that other packages are all still
+      // present in Ubuntu 22.04.
+      "libtree-sitter-dev",
+    ];
+    extra_args = [...extra_args, "--with-sqlite3", "--with-tree-sitter"];
   }
   await cmd("ls");
   if (toolkit === "gtk") {

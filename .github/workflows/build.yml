@@ -15,7 +15,7 @@ jobs:
         # older Ubuntu releases.
         include:
           - emacs: 29.1
-            os: ubuntu-20.04
+            os: ubuntu-22.04
           - emacs: 28.2
             os: ubuntu-20.04
           - emacs: 27.2
