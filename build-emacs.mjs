@@ -201,7 +201,7 @@ for (const patch of patches(v)) {
     "patch",
     "-N",
     "--strip=1",
-    `--input=./nix-emacs-ci/patches/${patch}`,
+    `--input=../nix-emacs-ci/patches/${patch}`,
   );
 }
 
