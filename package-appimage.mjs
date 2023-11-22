@@ -41,6 +41,7 @@ echo $GIT_REV
 echo "Downloading appimagetool..."
 wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
 chmod a+x appimagetool
+appimagetool=$(readlink -f appimagetool)
 echo "Downloading appimagetool...done"
 
 # wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
@@ -92,7 +93,7 @@ fi
 cd .. # Go out of AppDir. We're in build/ right now
 mkdir -p ../out/
 UPINFO="gh-releases-zsync|kisaragi-hiu|Emacs.AppImage|latest|Emacs-*x86_64.AppImage.zsync"
-../appimagetool -u "$UPINFO" -v $APP.AppDir
+$(appimagetool) -u "$UPINFO" -v $APP.AppDir
 mv *.AppImage* ../out/ # this includes the zsync file
 
 # readlink prints "the value of a symbolic link or canonical file name"
