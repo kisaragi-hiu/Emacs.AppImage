@@ -1,3 +1,5 @@
+/** Version comparison functions. */
+
 import assert from "assert/strict";
 
 let separator = ".";
@@ -27,11 +29,12 @@ function VersionToList(ver) {
   }
   assert(
     ver.match(/^[0-9]/),
-    `Invalid version syntax: "${ver}" (must start with a number)`
+    `Invalid version syntax: "${ver}" (must start with a number)`,
   );
   let i = 0;
   let s = "";
-  let m = "";
+  /** @type RegExpMatchArray */
+  let m;
   let lst = [];
   while ((m = ver.slice(i).match(/[0-9]+/i)) && m?.index === 0) {
     s = m?.index;

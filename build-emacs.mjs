@@ -1,7 +1,5 @@
 import process from "node:process";
 import fs from "node:fs";
-import os from "node:os";
-import path from "node:path";
 import { spawnSync } from "node:child_process";
 import {
   VersionLessThanOrEqual,
@@ -118,7 +116,7 @@ async function build(version) {
     "--prefix=/app",
     `--with-x-toolkit=${toolkit}`,
     "--with-xft",
-    ...extra_args
+    ...extra_args,
   );
   await cmd("make", ...make_args);
 }
@@ -128,7 +126,7 @@ await cmd(
   "sed",
   "-Ei",
   "/.*partner/! s/^# (deb-src .*)/\\1/g",
-  "/etc/apt/sources.list"
+  "/etc/apt/sources.list",
 );
 
 spawnSync("sudo", ["apt-get", "update"]);

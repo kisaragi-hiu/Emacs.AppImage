@@ -1,8 +1,8 @@
 import process from "node:process";
 import path from "node:path";
 import {
-  VersionLessThanOrEqual,
-  VersionLessThan,
+  // VersionLessThanOrEqual,
+  // VersionLessThan,
   VersionBetween,
 } from "./version.mjs";
 import { cmd } from "./cmd.mjs";
@@ -87,5 +87,5 @@ cd .. # Go out of AppDir
 mkdir -p ../out/
 generate_type2_appimage
 readlink -f ../out/*.AppImage*
-`
+`,
 );
