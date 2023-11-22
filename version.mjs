@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 
 let separator = ".";
 
+/** @type {[RegExp, number][]} */
 let version_regexp_alist = [
   [/^[-._+ ]?snapshot$/, -4],
   [/^[-._+]$/, -4],
@@ -14,10 +15,16 @@ let version_regexp_alist = [
   [/^[-._+ ]?(pre|rc)$/, -1],
 ];
 
+/** Return the absolute index of the end of `match` within its string.
+ * @param {RegExpMatchArray} match - the match object
+ */
 function matchEnd(match) {
   return match[0].length + match.index;
 }
 
+/** Convert `ver` to an internal format that is easier to compare.
+ * @param {string} ver - the version string
+ */
 function VersionToList(ver) {
   assert(typeof ver === "string", "Version must be a string");
   // Change .x.y to 0.x.y
@@ -66,6 +73,12 @@ function VersionToList(ver) {
   return lst;
 }
 
+/**
+ * Return the first non-zero element of `lst`, which is an array of integers.
+ * If all `lst` elements are zeros or `lst` is empty, return zero.
+ * Port of Emacs Lisp `version-list-not-zero`.
+ * @param {number[]} lst
+ */
 function VersionListNotZero(lst) {
   while (lst.length != 0 && lst[0] === 0) {
     lst = lst.slice(1);
@@ -77,6 +90,12 @@ function VersionListNotZero(lst) {
   }
 }
 
+/**
+ * Return true if `l1` is lower (older) than or equal to `l2`.
+ * Port of Emacs Lisp `version-list-<=`.
+ * @param {number[]} l1 - return true if this is <= l2
+ * @param {number[]} l2 - return true if this is > l1
+ */
 function VersionListLessThanOrEqual(l1, l2) {
   while (l1.length != 0 && l2.length != 0 && l1[0] === l2[0]) {
     l1 = l1.slice(1);
@@ -93,6 +112,12 @@ function VersionListLessThanOrEqual(l1, l2) {
   }
 }
 
+/**
+ * Return true if `l1` is lower (older) than `l2`.
+ * Port of Emacs Lisp `version-list-<`.
+ * @param {number[]} l1 - return true if this is < l2
+ * @param {number[]} l2 - return true if this is >= l1
+ */
 function VersionListLessThan(l1, l2) {
   while (l1.length != 0 && l2.length != 0 && l1[0] === l2[0]) {
     l1 = l1.slice(1);
@@ -109,6 +134,12 @@ function VersionListLessThan(l1, l2) {
   }
 }
 
+/**
+ * Return true if `l1` is equivalent to `l2`.
+ * Port of Emacs Lisp `version-list-=`.
+ * @param {number[]} l1 - return true if this is = l2
+ * @param {number[]} l2 - return true if this is = l1
+ */
 function VersionListEqual(l1, l2) {
   while (l1.length != 0 && l2.length != 0 && l1[0] === l2[0]) {
     l1 = l1.slice(1);
@@ -125,20 +156,67 @@ function VersionListEqual(l1, l2) {
   }
 }
 
+/** Return true if version `v1` is lower (older) than `v2`.
+ *
+ * Note that version string "1" is equal to "1.0", "1.0.0", "1.0.0.0",
+ * etc. That is, the trailing ".0"s are insignificant. Also, version
+ * string "1" is higher (newer) than "1pre", which is higher than
+ * "1beta", which is higher than "1alpha", which is higher than
+ * "1snapshot". Also, "-GIT", "-CVS" and "-NNN" are treated as
+ * snapshot versions.
+ *
+ * Port of Emacs Lisp `version<`.
+ *
+ * @param v1 {string}
+ * @param v2 {string}
+ */
 export function VersionLessThan(v1, v2) {
   return VersionListLessThan(VersionToList(v1), VersionToList(v2));
 }
 
+/** Return true if version `v1` is equal to `v2`.
+ *
+ * Note that version string "1" is equal to "1.0", "1.0.0", "1.0.0.0",
+ * etc. That is, the trailing ".0"s are insignificant. Also, version
+ * string "1" is higher (newer) than "1pre", which is higher than
+ * "1beta", which is higher than "1alpha", which is higher than
+ * "1snapshot". Also, "-GIT", "-CVS" and "-NNN" are treated as
+ * snapshot versions.
+ *
+ * Port of Emacs Lisp `version=`.
+ *
+ * @param v1 {string}
+ * @param v2 {string}
+ */
 export function VersionEqual(v1, v2) {
   return VersionListEqual(VersionToList(v1), VersionToList(v2));
 }
 
+/** Return true if version `v1` is lower (older) than or equal to `v2`.
+ *
+ * Note that version string "1" is equal to "1.0", "1.0.0", "1.0.0.0",
+ * etc. That is, the trailing ".0"s are insignificant. Also, version
+ * string "1" is higher (newer) than "1pre", which is higher than
+ * "1beta", which is higher than "1alpha", which is higher than
+ * "1snapshot". Also, "-GIT", "-CVS" and "-NNN" are treated as
+ * snapshot versions.
+ *
+ * Port of Emacs Lisp `version<=`.
+ * @param v1 {string}
+ * @param v2 {string}
+ */
 export function VersionLessThanOrEqual(v1, v2) {
   return VersionListLessThanOrEqual(VersionToList(v1), VersionToList(v2));
 }
 
-// Return true if A <= B < c
-// This allows 25, version, 27 to mean Emacs 25.* & 26.*
+/** Return true if `a` <= `b` < `c`.
+ *
+ * For example, `VersionBetween("25", version, "27")` returns true for
+ * 25.* and 26.*.
+ * @param a {string}
+ * @param b {string}
+ * @param c {string}
+ */
 export function VersionBetween(a, b, c) {
   assert(a && b && c, "There must be three arguments");
   return VersionLessThanOrEqual(a, b) && VersionLessThan(b, c);
