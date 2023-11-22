@@ -14,7 +14,9 @@ jobs:
         # It might be worth it to switch to GitLab CI so we can use
         # older Ubuntu releases.
         include:
-          - emacs: 28.1
+          - emacs: 29.1
+            os: ubuntu-20.04
+          - emacs: 28.2
             os: ubuntu-20.04
           - emacs: 27.2
             os: ubuntu-20.04
@@ -56,12 +58,10 @@ jobs:
           #   emacs: 21.4a
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Node 16
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: Build Emacs
         run: node build-emacs.mjs ${{ matrix.emacs }}
       - name: Package AppImage
@@ -73,3 +73,8 @@ jobs:
           if-no-files-found: error
           # When things actually work we will upload them to Releases
           retention-days: 7
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   if: startsWith(github.ref, 'refs/tags')
+      #   with:
+      #     files: build/out/*.AppImage*

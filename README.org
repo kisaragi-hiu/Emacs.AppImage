@@ -23,6 +23,7 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point.
 - 21 :: no support for x86-64
 
 ** Todos
+- Apply patches from https://github.com/purcell/nix-emacs-ci
 - Emacs 27 pdmp isn't being loaded properly
 - Enable native compilation for 28 (probably requires pdmp to work properly)
 - Also build for other minor versions
