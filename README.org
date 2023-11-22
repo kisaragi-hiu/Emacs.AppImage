@@ -7,9 +7,9 @@ AppImages are built on GitHub Actions and +distributed in Releases+ (not done ye
 I used https://github.com/probonopd/Emacs.AppImage as a starting point, and will probably apply [[https://github.com/purcell/nix-emacs-ci/tree/master/patches][the patches from purcell/nix-emacs-ci]].
 
 - 29 :: Unknown
-- 28 :: Usable but without pdump or native compilation.
-- 27 :: Usable but without pdump.
-- 26 :: Usable.
+- 28 :: Unknown (without pdump or native compilation)
+- 27 :: Unknown (without pdump)
+- 26 :: Unknown
 - 25 :: 
   : symbol lookup error: /usr/lib/libtiff.so.6: undefined symbol: jpeg12_write_raw_data, version LIBJPEG_8.0
 - 24 ::
