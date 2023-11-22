@@ -4,15 +4,15 @@ AppImages for many versions of Emacs, including the latest.
 
 AppImages are built on GitHub Actions and +distributed in Releases+ (not done yet).
 
-I used https://github.com/probonopd/Emacs.AppImage as a starting point, and will probably apply [[https://github.com/purcell/nix-emacs-ci/tree/master/patches][the patches from purcell/nix-emacs-ci]].
+I used https://github.com/probonopd/Emacs.AppImage as a starting point. This also applies [[https://github.com/purcell/nix-emacs-ci/tree/master/patches][patches from purcell/nix-emacs-ci]].
 
-- 29 :: Unknown
-- 28 :: Unknown (without pdump or native compilation)
-- 27 :: Unknown (without pdump)
-- 26 :: Unknown
-- 25 ::
-  : symbol lookup error: /usr/lib/libtiff.so.6: undefined symbol: jpeg12_write_raw_data, version LIBJPEG_8.0
-  Tracked in #1.
+Status (tested on Arch Linux):
+
+- 29 :: Works, except without pdump or native compilation. Lack of pdump means it's like running temacs directly, so you'll see a bunch of loading for builtin packages.
+- 28 :: GUI crashes and does not open (same as 25), no pdump, no native compilation.
+- 27 :: GUI crashes and does not open (same as 25), no pdump.
+- 26 :: GUI crashes and does not open (same as 25).
+- 25 :: GUI crashes with an error about failing to load a png file. =-nw= works.
 - 24 ::
   : ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
   : _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
@@ -28,7 +28,6 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point, and will
 
 ** Todos
 - Upload to release (perhaps with [[https://github.com/svenstaro/upload-release-action]])
-- Apply patches from https://github.com/purcell/nix-emacs-ci
 - Emacs 27 pdmp isn't being loaded properly
 - Enable native compilation for 28 (probably requires pdmp to work properly)
 - Also build for other minor versions
