@@ -8,11 +8,11 @@ I used https://github.com/probonopd/Emacs.AppImage as a starting point. This als
 
 Status (tested on Arch Linux):
 
-- 29 :: Works, except without pdump or native compilation. Lack of pdump means it's like running temacs directly, so you'll see a bunch of loading for builtin packages.
-- 28 :: GUI crashes and does not open (same as 25), no pdump, no native compilation.
-- 27 :: GUI crashes and does not open (same as 25), no pdump.
-- 26 :: GUI crashes and does not open (same as 25).
-- 25 :: GUI crashes with an error about failing to load a png file. =-nw= works.
+- 29 :: Works, except it does not load the builtin dump. This means it's like running temacs directly, so you'll see a bunch of loading for builtin packages. Also no native compilation.
+- 28 :: Does not load the builtin dump; no native compilation.
+- 27 :: Does not load the builtin dump.
+- 26 :: Works.
+- 25 :: Works.
 - 24 ::
   : ./stdio.h:1030:1: error: ‘gets’ undeclared here (not in a function)
   : _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");

@@ -86,7 +86,7 @@ fi
 # See #3
 # NOTE: this hard-codes gdk-pixbuf's ABI version to 2.10.0.
 echo "Copying gdk-pixbuf loaders..."
-cp -r /usr/lib/gdk-pixbuf-2.0 ./lib/x86_64-linux-gnu/
+cp -r /usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0 ./lib/x86_64-linux-gnu/
 echo "Copying gdk-pixbuf loaders...done"
 echo "Ensuring loaders cache exists..."
 if [ -f "./lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]; then
