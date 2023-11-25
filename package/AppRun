@@ -8,5 +8,23 @@ export EMACSDATA="$EMACSPATH/etc"
 export EMACSDOC="$EMACSPATH/etc"
 export EMACSLOADPATH="$EMACSPATH/site-lisp:$EMACSPATH/lisp:$EMACSPATH/lisp/emacs-lisp"
 export INFOPATH="$HERE/usr/share/info"
-export GDK_PIXBUF_MODULE_FILE="${HERE}/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+
+IFS=":"
+read -ra lib_dirs <<<"/usr/lib/:/usr/lib/x86_64-linux-gnu/:/lib/:/lib/x86_64-linux-gnu/:$LD_LIBRARY_PATH"
+unset IFS
+
+loaders_cache="notfound"
+for dir in "${lib_dirs[@]}"; do
+    if [ -f "$dir"/gdk-pixbuf-2.0/2.10.0/loaders.cache ]; then
+        loaders_cache="$dir"/gdk-pixbuf-2.0/2.10.0/loaders.cache
+        export GDK_PIXBUF_MODULE_FILE="$loaders_cache"
+        break
+    fi
+done
+
+if [ "$loaders_cache" = "notfound" ]; then
+    echo "gdk-pixbuf loaders cache not found. GTK is likely to crash."
+    echo "Text mode (-nw) will still work."
+fi
+
 "${HERE}"/usr/bin/emacs "$@"
