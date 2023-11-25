@@ -78,6 +78,7 @@ jobs:
           file_glob: true
           file: build/out/*.AppImage*
           prerelease: true
+          tag: continuous
       # - uses: actions/upload-artifact@v3
       #   with:
       #     name: built files ${{ matrix.emacs }}
