@@ -23,7 +23,7 @@ if (VersionBetween("25", v, "26")) {
 }
 excludelist = path.resolve(excludelist);
 
-let AppRun = path.resolve("AppRun");
+let AppRun = path.resolve("package/AppRun");
 
 // Based on https://github.com/probonopd/Emacs.AppImage/blob/master/appimage.sh
 await cmd(
@@ -62,7 +62,7 @@ sed -i -e 's|/usr|././|g' $BINARY
 sed -i -e 's|/app|././|g' $BINARY
 
 ## Copy desktop and icon file to AppDir for AppRun to pick them up
-cp ${AppRun} .
+cp ${AppRun} . # that's a JS variable! Same below.
 chmod a+x ./AppRun
 
 ### eg. emacs.desktop -> emacs-27.2.desktop + edit name "Emacs" to "Emacs 27.2"

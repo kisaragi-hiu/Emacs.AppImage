@@ -1,0 +1,16 @@
+* Build process of this AppImage
+
+After push, or after a manual workflow trigger, the =build= GitHub Actions workflow starts running.
+
+After setting some things up, =build-emacs.mjs= is executed.
+
+- It takes a version string,
+- installs the build dependencies
+- downloads the tarball for that version,
+- applies patches from [[https://github.com/purcell/nix-emacs-ci][purcell/nix-emacs-ci]]
+- builds Emacs with the right options,
+- then installs the just-built Emacs onto the system, ready for the packaging script to take over.
+
+After this, we package the AppImage with =package-appimage.mjs=. This sets up AppDir then packs everything with =appimagetool=.
+
+The built images are then uploaded to a release with =svenstaro/upload-release-action=. This is, for whatever reason, way faster than uploading artifacts ([[https://github.com/actions/upload-artifact/issues/199]]).
