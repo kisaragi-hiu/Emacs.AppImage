@@ -1,13 +1,12 @@
 name: "Build Emacs"
 on:
-  pull_request:
   push:
-    tags:
-      - "*"
     branches:
       - master
     paths-ignore:
       - "*.org"
+  workflow_dispatch:
+
 jobs:
   "build":
     timeout-minutes: 120
