@@ -94,7 +94,7 @@ echo "Loaders cache already exists"
 else
 gdk-pixbuf-query-loaders > ./lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache
 fi
-echo "Ensuring loaders cache exists...done
+echo "Ensuring loaders cache exists...done"
 echo "Contents of ./lib/x86_64-linux-gnu/gdk-pixbuf-2.0:"
 tree ./lib/x86_64-linux-gnu/gdk-pixbuf-2.0
 
