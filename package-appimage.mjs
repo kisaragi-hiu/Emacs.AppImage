@@ -28,7 +28,7 @@ let AppRun = path.resolve("package/AppRun");
 // Based on https://github.com/probonopd/Emacs.AppImage/blob/master/appimage.sh
 await cmd(
   "bash",
-  "-ex",
+  "-e",
   "-c",
   `
 # Metadata
