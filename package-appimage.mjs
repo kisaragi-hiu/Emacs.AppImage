@@ -83,6 +83,21 @@ if [ -d "/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0" ]; then
   cp -r /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0 ./lib/x86_64-linux-gnu/
 fi
 
+# See #3
+# NOTE: this hard-codes gdk-pixbuf's ABI version to 2.10.0.
+echo "Copying gdk-pixbuf loaders..."
+cp -r /usr/lib/gdk-pixbuf-2.0 ./lib/x86_64-linux-gnu/
+echo "Copying gdk-pixbuf loaders...done"
+echo "Ensuring loaders cache exists..."
+if [ -f "./lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]; then
+echo "Loaders cache already exists"
+else
+gdk-pixbuf-query-loaders > ./lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache
+fi
+echo "Ensuring loaders cache exists...done
+echo "Contents of ./lib/x86_64-linux-gnu/gdk-pixbuf-2.0:"
+tree ./lib/x86_64-linux-gnu/gdk-pixbuf-2.0
+
 (
  cd usr/bin/
  rm emacs
@@ -96,8 +111,9 @@ UPINFO="gh-releases-zsync|kisaragi-hiu|Emacs.AppImage|latest|Emacs-*x86_64.AppIm
 "$appimagetool" -u "$UPINFO" -v $APP.AppDir
 mv *.AppImage* ../out/ # this includes the zsync file
 
-# readlink prints "the value of a symbolic link or canonical file name"
-# added this because I could never remember what "readlink" is doing here
+# readlink prints "the value of a symbolic link or canonical file
+# name". I added this because I could never remember what "readlink"
+# is doing here.
 readlink -f ../out/*.AppImage*
 `,
 );
