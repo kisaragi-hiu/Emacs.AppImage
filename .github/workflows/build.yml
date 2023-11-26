@@ -72,7 +72,10 @@ jobs:
       - name: Set up cache for Emacs tarball
         uses: actions/cache@v3
         with:
-          path: emacs*.tar.gz
+          path: |
+            emacs*.tar.bz2
+            emacs*.tar.xz
+            emacs*.tar.gz
           key: emacs-${{ matrix.emacs }}
       - name: Build Emacs
         run: node build-emacs.mjs ${{ matrix.emacs }}

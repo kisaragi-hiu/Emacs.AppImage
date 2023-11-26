@@ -204,28 +204,49 @@ await cmd(
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
-if (!fs.existsSync(`emacs-${v}.tar.gz`)) {
-  log("Downloading Emacs tarball...");
-  const res = spawnSync("wget", [
-    "-c",
-    `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`,
-  ]);
-  if (res.error) {
-    log("Download failed. Result object:");
-    log(res);
-    log("Exiting...");
-    process.exit(1);
+/**
+ * Download Emacs tarball for `version` from ftpmirror.gnu.org.
+ * If the file already exists, just return as if it's just been downloaded.
+ *
+ * This tries xz, bz2, and gz tarballs, in that order.
+ * (xz archives started being provided from 24.2 onwards; bz2 between
+ * 23.1 and 24.2 (inclusive); gz for all versions.)
+ *
+ * Returns the downloaded file name, or null if the download process
+ * returned a non-zero exit code.
+ *
+ * @param {string} version
+ * @returns {string | null}
+ */
+function downloadEmacs(version) {
+  for (const ext in ["xz", "bz2", "gz"]) {
+    const file = `emacs-${version}.tar.${ext}`;
+    if (fs.existsSync(file)) {
+      log("Emacs tarball is already present");
+      return file;
+    } else {
+      const res = spawnSync("wget", `http://ftpmirror.gnu.org/emacs/${file}`);
+      if (res.status === 0) {
+        return file;
+      }
+    }
   }
-  log("Downloading Emacs tarball...done");
-} else {
-  log("Emacs tarball is already present");
+  log("Download failed");
+  return null;
 }
+
+log("Downloading Emacs tarball...");
+const tarball = downloadEmacs(v);
+if (typeof tarball !== "string") {
+  process.exit(1);
+}
+log("Downloading Emacs tarball...done");
 
 console.log("Extracting Emacs tarball...");
 if (!fs.existsSync(`emacs-${v}`)) {
-  await cmd("tar", "xf", `emacs-${v}.tar.gz`);
+  await cmd("tar", "xf", tarball);
 }
-console.log("Downloading Emacs tarball...done");
+console.log("Extracting Emacs tarball...done");
 
 console.log("Current directory content:");
 fs.readdirSync(".");
