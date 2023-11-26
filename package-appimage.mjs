@@ -70,6 +70,17 @@ chmod a+x ./AppRun
 
 cp ${SiteStart} ./usr/share/emacs/site-lisp/site-start.el
 
+# Emacs can find the dump next to the executable with the same basename.
+#
+# This is... not the best approach. We're still unnecessarily setting
+# libexecdir during build. But this should at least get the dump to
+# load.
+emacs_exe=$(find ./usr/bin/ -name "emacs*" -type f -executable -not -name "*client" | head -n 1)
+dump=$(find usr/lib/ -name "*.pdmp")
+if [ -f "$dump" ]; then
+  mv "$dump" "$emacs_exe".pdmp
+fi
+
 ### eg. emacs.desktop -> emacs-27.2.desktop + edit name "Emacs" to "Emacs 27.2"
 for FILE in $(find usr/share/applications -iname "*$\{LOWERAPP}.desktop"); do
   sed 's/Name=Emacs/Name=Emacs ${v}/' "$FILE" > "$(basename "$FILE" .desktop)"-${v}.desktop

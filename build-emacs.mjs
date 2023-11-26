@@ -49,9 +49,9 @@ function patches(version) {
       "fpending-24.1.patch",
     );
   }
-  if (VersionLessThanOrEqual("27", version)) {
-    files.push("./patches/loadup-undumped.patch");
-  }
+  // if (VersionLessThanOrEqual("27", version)) {
+  //   files.push("./patches/loadup-undumped.patch");
+  // }
   if (VersionEqual("24.3", version)) {
     files.push("all-dso-handle.patch", "fpending-24.3.patch");
   }
