@@ -32,6 +32,7 @@ See http://ftpmirror.gnu.org/emacs/ for a list of all versions.
  * @param {string} version
  */
 function downloadEmacs(version) {
+  const results = [];
   for (const ext in ["xz", "bz2", "gz"]) {
     const file = `emacs-${version}.tar.${ext}`;
     if (fs.existsSync(file)) {
@@ -42,8 +43,10 @@ function downloadEmacs(version) {
       if (res.status === 0) {
         return file;
       }
+      results.push(res);
     }
   }
+  log(results);
   return null;
 }
 
