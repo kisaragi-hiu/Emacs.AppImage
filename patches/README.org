@@ -1,5 +1,7 @@
 * Patches
 
-Extra patches.
+Extra patches would come here.
 
-- loadup-undumped.patch :: for fixing #5 while we're still running Emacs 27+ undumped. This came from Termux: see [[https://github.com/termux/termux-packages/pull/433][github:termux/termux-packages#433]].
+If we for some reason ever want/need to run Emacs undumped, we'll probably need the patch from [[https://github.com/termux/termux-packages/pull/433][github:termux/termux-packages#433]].
+
+This folder was previously created to host that patch, before [[https://github.com/kisaragi-hiu/Emacs.AppImage/issues/2][#2]] was fixed.
