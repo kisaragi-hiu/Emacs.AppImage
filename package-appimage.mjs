@@ -73,6 +73,10 @@ chmod a+x ./AppRun
 echo "Copying site-start.el..."
 cp ${SiteStart} ./usr/share/emacs/site-lisp/site-start.el
 
+echo "Using latest package-keyring.gpg..."
+wget https://github.com/emacs-mirror/emacs/raw/master/etc/package-keyring.gpg
+mv package-keyring.gpg ./usr/share/emacs/${v}/etc/package-keyring.gpg
+
 # Emacs can find the dump next to the executable with the same basename.
 #
 # This is... not the best approach. We're still unnecessarily setting
