@@ -137,10 +137,12 @@ async function build(version) {
     extra_packages = [...extra_packages, "libjansson-dev"];
     extra_args = [...extra_args, "--with-cairo", "--with-harfbuzz"];
   }
+  // Native compilation for 28+.
+  // We don't do ahead of time compilation for now. That would
+  // probably take hours of build time.
   if (VersionLessThanOrEqual("28", version)) {
-    // extra_packages = [...extra_packages, "libgccjit-9-dev"];
-    // extra_args = [...extra_args, "--with-native-compilation"];
-    // make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
+    extra_packages = [...extra_packages, "libgccjit-9-dev"];
+    extra_args = [...extra_args, "--with-native-compilation"];
   }
   // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
