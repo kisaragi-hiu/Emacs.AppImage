@@ -29,7 +29,7 @@ let SiteStart = path.resolve("package/site-start.el");
 // Based on https://github.com/probonopd/Emacs.AppImage/blob/master/appimage.sh
 await cmd(
   "bash",
-  "-e",
+  "-ex",
   "-c",
   `
 # Metadata
