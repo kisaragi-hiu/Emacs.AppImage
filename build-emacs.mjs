@@ -30,7 +30,6 @@ See http://ftpmirror.gnu.org/emacs/ for a list of all versions.
  * returned a non-zero exit code.
  *
  * @param {string} version
- * @returns {string | null}
  */
 function downloadEmacs(version) {
   for (const ext in ["xz", "bz2", "gz"]) {
@@ -91,6 +90,21 @@ function patches(version) {
       return `./nix-emacs-ci/patches/${file}`;
     }
   });
+}
+
+/**
+ * Return source directory name for `version`.
+ * @param {string} version
+ */
+function dir_of(version) {
+  // This is necessary because, for instance, emacs-23.2b.tar.gz
+  // contains one folder called "emacs-23.2", and the two aren't the
+  // same.
+  if (["23.2b", "21.4a"].includes(version)) {
+    return `emacs-${v.slice(0, -1)}`;
+  } else {
+    return `emacs-${v}`;
+  }
 }
 
 async function build(version) {
@@ -243,7 +257,7 @@ if (typeof tarball !== "string") {
 log("Downloading Emacs tarball...done");
 
 console.log("Extracting Emacs tarball...");
-if (!fs.existsSync(`emacs-${v}`)) {
+if (!fs.existsSync(dir_of(v))) {
   await cmd("tar", "xf", tarball);
 }
 console.log("Extracting Emacs tarball...done");
@@ -252,11 +266,7 @@ console.log("Current directory content:");
 fs.readdirSync(".");
 
 console.log("Going into Emacs source directory");
-if (["23.2b", "21.4a"].indexOf(v) != -1) {
-  process.chdir(`emacs-${v.slice(0, -1)}`);
-} else {
-  process.chdir(`emacs-${v}`);
-}
+process.chdir(dir_of(v));
 
 // Patch application must be done with current directory in the source
 // directory. Patches are sensitive to the current directory.
