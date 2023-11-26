@@ -36,15 +36,14 @@ Status (tested on Arch Linux):
 - 21 :: no support for x86-64
 
 ** Todos
-- Emacs 27 pdmp isn't being loaded properly
-- Enable native compilation for 28 (probably requires pdmp to work properly)
+- Enable native compilation for 28+
 - Also build for other minor versions
 - Enable xwidgets
 
   Needs [[https://packages.ubuntu.com/focal/libwebkit2gtk-4.0-dev][libwebkit2gtk-4.0-dev]]
 
-- Emacs <= 23
+- Emacs <= 24
 
-  These need GCC 4.8, it seems.
+  Emacs <= 23 would need GCC 4.8, it seems.
 
   cf. https://qiita.com/eurogrve/items/fcb15556bb29289db63e
