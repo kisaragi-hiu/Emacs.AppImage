@@ -26,39 +26,51 @@ if (!v) {
 }
 
 // Ported from https://github.com/purcell/nix-emacs-ci/blob/master/emacs.nix
-/** Return the patch files applicable for `version`. */
+
+/** Return the patch files applicable for `version`, relative to the
+ * project root directory. */
 function patches(version) {
   let files = [];
   if (VersionEqual("23.4", version)) {
-    files = [...files, "all-dso-handle.patch", "fpending-23.4.patch"];
+    files.push("all-dso-handle.patch", "fpending-23.4.patch");
   }
   if (VersionEqual("24.1", version)) {
-    files = [
-      ...files,
+    files.push(
       "gnutls-e_again-old-emacsen.patch",
       "all-dso-handle.patch",
       "remove-old-gets-warning.patch",
       "fpending-24.1.patch",
-    ];
+    );
   }
   if (VersionEqual("24.2", version)) {
-    files = [
-      ...files,
+    files.push(
       "gnutls-e_again-old-emacsen.patch",
       "all-dso-handle.patch",
       "fpending-24.1.patch",
-    ];
+    );
+  }
+  if (VersionLessThanOrEqual("27", version)) {
+    files.push("./patches/loadup-undumped.patch");
   }
   if (VersionEqual("24.3", version)) {
-    files = [...files, "all-dso-handle.patch", "fpending-24.3.patch"];
+    files.push("all-dso-handle.patch", "fpending-24.3.patch");
   }
   if (VersionBetween("24.3", version, "26.3")) {
-    files = [...files, "gnutls-e_again.patch"];
+    files.push("gnutls-e_again.patch");
   }
   if (VersionBetween("25.1", version, "28.1")) {
-    files = [...files, "sigsegv-stack.patch"];
+    files.push("sigsegv-stack.patch");
   }
-  return files;
+  // This allows me to specify patches from nix-emacs-ci without
+  // repeating that path over and over again, while still being able
+  // to add other patches.
+  return files.map((file) => {
+    if (file.includes("patches")) {
+      return file;
+    } else {
+      return `./nix-emacs-ci/patches/${file}`;
+    }
+  });
 }
 
 async function build(version) {
@@ -193,22 +205,19 @@ console.log("Downloading Emacs tarball...done");
 console.log("Current directory content:");
 fs.readdirSync(".");
 
+console.log("Applying patches");
+for (const patch of patches(v)) {
+  await cmd("patch", "-N", "--strip=1", `--input=${patch}`);
+}
+
+console.log("Going into Emacs source directory");
 if (["23.2b", "21.4a"].indexOf(v) != -1) {
   process.chdir(`emacs-${v.slice(0, -1)}`);
 } else {
   process.chdir(`emacs-${v}`);
 }
 
-console.log("Applying patches");
-for (const patch of patches(v)) {
-  await cmd(
-    "patch",
-    "-N",
-    "--strip=1",
-    `--input=../nix-emacs-ci/patches/${patch}`,
-  );
-}
-
+console.log("Building");
 await build(v);
 await cmd("sudo", "make", "install");
 process.chdir(`..`);

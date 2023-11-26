@@ -1,0 +1,5 @@
+* Patches
+
+Extra patches.
+
+- loadup-undumped.patch :: for fixing #5 while we're still running Emacs 27+ undumped. This came from Termux: see [[https://github.com/termux/termux-packages/pull/433][github:termux/termux-packages#433]].
