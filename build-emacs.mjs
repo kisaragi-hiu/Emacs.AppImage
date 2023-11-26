@@ -43,7 +43,7 @@ function downloadEmacs(version) {
       if (res.status === 0) {
         return file;
       }
-      results.push(res);
+      results.push(res.stderr.toString());
     }
   }
   log(results);
