@@ -205,16 +205,18 @@ console.log("Downloading Emacs tarball...done");
 console.log("Current directory content:");
 fs.readdirSync(".");
 
-console.log("Applying patches");
-for (const patch of patches(v)) {
-  await cmd("patch", "-N", "--strip=1", `--input=${patch}`);
-}
-
 console.log("Going into Emacs source directory");
 if (["23.2b", "21.4a"].indexOf(v) != -1) {
   process.chdir(`emacs-${v.slice(0, -1)}`);
 } else {
   process.chdir(`emacs-${v}`);
+}
+
+// Patch application must be done with current directory in the source
+// directory. Patches are sensitive to the current directory.
+console.log("Applying patches");
+for (const patch of patches(v)) {
+  await cmd("patch", "-N", "--strip=1", `--input=../${patch}`);
 }
 
 console.log("Building");
