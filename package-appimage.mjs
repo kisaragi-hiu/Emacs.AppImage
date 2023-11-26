@@ -5,7 +5,7 @@ import {
   // VersionLessThan,
   VersionBetween,
 } from "./version.mjs";
-import { cmd } from "./cmd.mjs";
+import { cmd } from "./helpers.mjs";
 
 let v = process.argv[2];
 if (!v) {

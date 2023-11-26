@@ -7,7 +7,7 @@ import {
   VersionLessThan,
   VersionBetween,
 } from "./version.mjs";
-import { cmd } from "./cmd.mjs";
+import { cmd, log } from "./helpers.mjs";
 
 function print_help() {
   console.log(`
@@ -206,20 +206,20 @@ spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
 if (!fs.existsSync(`emacs-${v}.tar.gz`)) {
-  console.log("Downloading Emacs tarball...");
+  log("Downloading Emacs tarball...");
   const res = spawnSync("wget", [
     "-c",
     `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`,
   ]);
   if (res.error) {
-    console.log("Download failed. Result object:");
-    console.log(JSON.stringify(res, null, 2));
-    console.log("Exiting...");
+    log("Download failed. Result object:");
+    log(res);
+    log("Exiting...");
     process.exit(1);
   }
-  console.log("Downloading Emacs tarball...done");
+  log("Downloading Emacs tarball...done");
 } else {
-  console.log("Emacs tarball is already present");
+  log("Emacs tarball is already present");
 }
 
 console.log("Extracting Emacs tarball...");

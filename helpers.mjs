@@ -1,4 +1,22 @@
+/**
+ * Helper functions such as `cmd` or `log`.
+ */
+
 import { spawn } from "node:child_process";
+
+/**
+ * Log `obj` to standard output.
+ * If `obj` is an object, log its JSON representation instead.
+ * @param {any} obj
+ */
+export function log(obj) {
+  const type = typeof obj;
+  if (type === "object") {
+    console.log(JSON.stringify(obj, null, 2));
+  } else {
+    console.log(obj);
+  }
+}
 
 export function cmd(...command) {
   console.log(command);
