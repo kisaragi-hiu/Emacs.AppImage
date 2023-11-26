@@ -207,7 +207,16 @@ spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
 console.log("Downloading Emacs tarball...");
 if (!fs.existsSync(`emacs-${v}`)) {
-  spawnSync("wget", ["-c", `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`]);
+  const res = spawnSync("wget", [
+    "-c",
+    `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`,
+  ]);
+  if (res.error) {
+    console.log("Download failed. Result object:");
+    console.log(JSON.stringify(res, null, 2));
+    console.log("Exiting...");
+    process.exit(1);
+  }
   await cmd("tar", "xf", `emacs-${v}.tar.gz`);
 }
 console.log("Downloading Emacs tarball...done");
