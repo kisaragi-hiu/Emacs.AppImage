@@ -45,6 +45,7 @@ chmod a+x appimagetool
 appimagetool=$(readlink -f appimagetool)
 echo "Downloading appimagetool...done"
 
+echo "Sourcing functions.sh..."
 # wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
 . ./package/functions.sh
 
@@ -65,9 +66,11 @@ sed -i -e 's|/app|././|g' $BINARY
 # Still in AppDir
 
 ## Copy desktop and icon file to AppDir for AppRun to pick them up
+echo "Copying and setting up AppRun..."
 cp ${AppRun} . # that's a JS variable! Same below.
 chmod a+x ./AppRun
 
+echo "Copying site-start.el..."
 cp ${SiteStart} ./usr/share/emacs/site-lisp/site-start.el
 
 # Emacs can find the dump next to the executable with the same basename.
@@ -78,33 +81,40 @@ cp ${SiteStart} ./usr/share/emacs/site-lisp/site-start.el
 emacs_exe=$(find ./usr/bin/ -name "emacs*" -type f -executable -not -name "*client" | head -n 1)
 dump=$(find usr/lib/ -name "*.pdmp")
 if [ -f "$dump" ]; then
+  echo "Putting the .pdmp file in the right place..."
   mv "$dump" "$emacs_exe".pdmp
 fi
 
 ### eg. emacs.desktop -> emacs-27.2.desktop + edit name "Emacs" to "Emacs 27.2"
+echo "Copying .desktop and icons..."
 for FILE in $(find usr/share/applications -iname "*$\{LOWERAPP}.desktop"); do
   sed 's/Name=Emacs/Name=Emacs ${v}/' "$FILE" > "$(basename "$FILE" .desktop)"-${v}.desktop
 done
 get_icon
 
 ## Copy dependencies then delete stuff that should not be bundled
+echo "Copying dependencies..."
 copy_deps
+echo "Deleting excluded dependencies..."
 delete_blacklisted ${excludelist}
 rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
 VERSION="${v}"
 
+echo "Trying to copy webkit2gtk-4.0..."
 # mkdir -p ./lib/x86_64-linux-gnu/webkit2gtk-4.0
 if [ -d "/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0" ]; then
   cp -r /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0 ./lib/x86_64-linux-gnu/
 fi
 
+echo "Creating bundled symlink to bundled emacs..."
 (
  cd usr/bin/
  rm emacs
  ln -s $(find . -name "emacs-*" -executable) emacs
 )
 
+echo "Packing into AppImage..."
 # Package
 cd .. # Go out of AppDir. We're in build/ right now
 mkdir -p ../out/
