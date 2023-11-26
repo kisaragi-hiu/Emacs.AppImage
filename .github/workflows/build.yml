@@ -79,6 +79,7 @@ jobs:
           file: build/out/*.AppImage*
           prerelease: true
           tag: continuous
+          release_name: continuous ${{ github.sha }}
       # - uses: actions/upload-artifact@v3
       #   with:
       #     name: built files ${{ matrix.emacs }}
