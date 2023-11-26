@@ -12,10 +12,8 @@ Status (tested on Arch Linux):
 
 - 29 :: Works.
   - Default GUI icons are missing.
-  - No native compilation.
 - 28 :: Works.
   - Default GUI icons are missing.
-  - No native compilation.
 - 27 :: Works.
   - Default GUI icons are missing.
 - 26 :: Works.

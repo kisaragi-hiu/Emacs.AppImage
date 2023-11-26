@@ -139,16 +139,18 @@ async function build(version) {
   }
   // Native compilation for 28+.
   if (VersionBetween("28", version, "29")) {
+    // libgccjit needs to be the same version as gcc.
+    // runner-images Ubuntu 20.04 provides gcc 9, so we use libgccjit-9.
     extra_packages = [...extra_packages, "libgccjit-9-dev"];
     extra_args = [...extra_args, "--with-native-compilation"];
     // We don't do ahead of time compilation for now. That would
     // probably take hours of build time.
     // make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
   } else if (VersionLessThanOrEqual("29", version)) {
-    // 29 on Ubuntu 22.04 cannot find libgccjit even after installing
-    // libgccjit-9-dev. Try libgccjit-12 (latest in Ubuntu 22.04), I
-    // guess...?
-    extra_packages = [...extra_packages, "libgccjit-12-dev"];
+    // runner-images Ubuntu 22.04 provides gcc 11, so we use libgccjit-11.
+    // Thank you reddit:u/martinslot for this comment:
+    // https://reddit.com/r/emacs/comments/rojo7y/comment/hq188oe/
+    extra_packages = [...extra_packages, "libgccjit-11-dev"];
     extra_args = [...extra_args, "--with-native-compilation"];
     // We don't do ahead of time compilation for now. That would
     // probably take hours of build time.
