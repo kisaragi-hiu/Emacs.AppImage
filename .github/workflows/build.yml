@@ -71,9 +71,9 @@ jobs:
           node-version: 20
       - name: Set up cache for Emacs tarball
         uses: actions/cache@v3
-        id: emacs-${{ matrix.emacs }}
         with:
           path: emacs*.tar.gz
+          key: emacs-${{ matrix.emacs }}
       - name: Build Emacs
         run: node build-emacs.mjs ${{ matrix.emacs }}
       - name: Package AppImage
