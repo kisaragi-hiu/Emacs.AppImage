@@ -24,6 +24,7 @@ if (VersionBetween("25", v, "26")) {
 excludelist = path.resolve(excludelist);
 
 let AppRun = path.resolve("package/AppRun");
+let SiteStart = path.resolve("package/site-start.el");
 
 // Based on https://github.com/probonopd/Emacs.AppImage/blob/master/appimage.sh
 await cmd(
@@ -61,9 +62,13 @@ BINARY=$(find ./usr/bin/ -name emacs* -type f -executable | head -n 1)
 sed -i -e 's|/usr|././|g' $BINARY
 sed -i -e 's|/app|././|g' $BINARY
 
+# Still in AppDir
+
 ## Copy desktop and icon file to AppDir for AppRun to pick them up
 cp ${AppRun} . # that's a JS variable! Same below.
 chmod a+x ./AppRun
+
+cp ${SiteStart} ./usr/share/emacs/site-lisp/site-start.el
 
 ### eg. emacs.desktop -> emacs-27.2.desktop + edit name "Emacs" to "Emacs 27.2"
 for FILE in $(find usr/share/applications -iname "*$\{LOWERAPP}.desktop"); do
