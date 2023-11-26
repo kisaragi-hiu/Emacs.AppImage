@@ -138,12 +138,23 @@ async function build(version) {
     extra_args = [...extra_args, "--with-cairo", "--with-harfbuzz"];
   }
   // Native compilation for 28+.
-  // We don't do ahead of time compilation for now. That would
-  // probably take hours of build time.
-  if (VersionLessThanOrEqual("28", version)) {
+  if (VersionBetween("28", version, "29")) {
     extra_packages = [...extra_packages, "libgccjit-9-dev"];
     extra_args = [...extra_args, "--with-native-compilation"];
+    // We don't do ahead of time compilation for now. That would
+    // probably take hours of build time.
+    // make_args = ["NATIVE_FULL_AOT=1", "bootstrap"];
+  } else if (VersionLessThanOrEqual("29", version)) {
+    // 29 on Ubuntu 22.04 cannot find libgccjit even after installing
+    // libgccjit-9-dev. Try libgccjit-12 (latest in Ubuntu 22.04), I
+    // guess...?
+    extra_packages = [...extra_packages, "libgccjit-12-dev"];
+    extra_args = [...extra_args, "--with-native-compilation"];
+    // We don't do ahead of time compilation for now. That would
+    // probably take hours of build time.
+    // extra_args = [...extra_args, "--with-native-compilation=aot"];
   }
+
   // Emacs 29 adds native WebP support
   if (VersionLessThanOrEqual("29", version)) {
     extra_packages = [
