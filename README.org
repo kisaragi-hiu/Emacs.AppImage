@@ -12,8 +12,10 @@ Status (tested on Arch Linux):
 
 - 29 :: Works.
   - Default GUI icons are missing.
+  - No native compilation. See [[https://github.com/kisaragi-hiu/Emacs.AppImage/issues/4][#4]] for why I don't think it's worth it.
 - 28 :: Works.
   - Default GUI icons are missing.
+  - No native compilation.
 - 27 :: Works.
   - Default GUI icons are missing.
 - 26 :: Works.
