@@ -29,7 +29,7 @@ let SiteStart = path.resolve("package/site-start.el");
 // Based on https://github.com/probonopd/Emacs.AppImage/blob/master/appimage.sh
 await cmd(
   "bash",
-  "-ex",
+  "-e",
   "-c",
   `
 # Metadata
@@ -102,7 +102,7 @@ fi
 (
  cd usr/bin/
  rm emacs
- ln -s emacs-* emacs
+ ln -s $(find . -name "emacs-*" -executable) emacs
 )
 
 # Package
