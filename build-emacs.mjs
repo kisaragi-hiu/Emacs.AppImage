@@ -50,7 +50,8 @@ function downloadEmacs(version) {
 // Ported from https://github.com/purcell/nix-emacs-ci/blob/master/emacs.nix
 
 /** Return the patch files applicable for `version`, relative to the
- * project root directory. */
+ * project root directory.
+ * @param {string} version */
 function patches(version) {
   let files = [];
   if (VersionEqual("23.4", version)) {
@@ -107,6 +108,7 @@ function dir_of(version) {
   }
 }
 
+/** @param {string} version */
 async function build(version) {
   let extra_args = [];
   let make_args = [];

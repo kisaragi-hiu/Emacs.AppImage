@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // Why the fuck is this not default for the language server?
+    "checkJs": true,
+    // Why the fuck is this not default for .mjs files?
+    "target": "es2022",
+    "module": "nodenext"
+  }
+}
