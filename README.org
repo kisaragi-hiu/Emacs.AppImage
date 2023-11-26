@@ -2,7 +2,9 @@
 
 AppImages for many versions of Emacs, including the latest.
 
-AppImages are built on GitHub Actions and +distributed in Releases+ (not done yet).
+Current versions: 25~29.
+
+AppImages are built on GitHub Actions and distributed in Releases.
 
 I used https://github.com/probonopd/Emacs.AppImage as a starting point. This also applies [[https://github.com/purcell/nix-emacs-ci/tree/master/patches][patches from purcell/nix-emacs-ci]].
 
@@ -10,15 +12,12 @@ Status (tested on Arch Linux):
 
 - 29 :: Works.
   - Default GUI icons are missing.
-  - Does not load the builtin dump. This means it's like running temacs directly, so you'll see a bunch of loading for builtin packages.
   - No native compilation.
 - 28 :: Works.
   - Default GUI icons are missing.
-  - Does not load the builtin dump.
   - No native compilation.
 - 27 :: Works.
   - Default GUI icons are missing.
-  - Does not load the builtin dump.
 - 26 :: Works.
   - Default GUI icons are missing.
 - 25 :: Works.
