@@ -205,8 +205,8 @@ await cmd(
 spawnSync("sudo", ["apt-get", "update"]);
 spawnSync("sudo", ["apt-get", "-y", "build-dep", "emacs"]);
 
-console.log("Downloading Emacs tarball...");
-if (!fs.existsSync(`emacs-${v}`)) {
+if (!fs.existsSync(`emacs-${v}.tar.gz`)) {
+  console.log("Downloading Emacs tarball...");
   const res = spawnSync("wget", [
     "-c",
     `http://ftpmirror.gnu.org/emacs/emacs-${v}.tar.gz`,
@@ -217,6 +217,13 @@ if (!fs.existsSync(`emacs-${v}`)) {
     console.log("Exiting...");
     process.exit(1);
   }
+  console.log("Downloading Emacs tarball...done");
+} else {
+  console.log("Emacs tarball is already present");
+}
+
+console.log("Extracting Emacs tarball...");
+if (!fs.existsSync(`emacs-${v}`)) {
   await cmd("tar", "xf", `emacs-${v}.tar.gz`);
 }
 console.log("Downloading Emacs tarball...done");

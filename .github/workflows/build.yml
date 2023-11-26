@@ -69,6 +69,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Set up cache for Emacs tarball
+        uses: actions/cache@v3
+        id: emacs-${{ matrix.emacs }}
+        with:
+          path: emacs*.tar.gz
       - name: Build Emacs
         run: node build-emacs.mjs ${{ matrix.emacs }}
       - name: Package AppImage
