@@ -38,7 +38,7 @@ function downloadEmacs(version) {
       log("Emacs tarball is already present");
       return file;
     } else {
-      const res = spawnSync("wget", `http://ftpmirror.gnu.org/emacs/${file}`);
+      const res = spawnSync("wget", [`http://ftpmirror.gnu.org/emacs/${file}`]);
       if (res.status === 0) {
         return file;
       }
