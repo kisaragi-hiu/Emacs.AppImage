@@ -74,6 +74,7 @@ jobs:
       - name: Package AppImage
         run: node package-appimage.mjs ${{ matrix.emacs }}
       - uses: svenstaro/upload-release-action@v2
+        if: github.event_name == 'push'
         with:
           file_glob: true
           file: build/out/*.AppImage*
