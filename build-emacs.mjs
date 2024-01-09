@@ -6,6 +6,8 @@ import {
   VersionEqual,
   VersionLessThan,
   VersionBetween,
+  snapshot,
+  snapshot_rev,
 } from "./version.mjs";
 import { cmd, log } from "./helpers.mjs";
 
@@ -15,6 +17,8 @@ node build-emacs.mjs <version>
 
 <version>: Something like 28.1, 27.2, 26.3...
 See http://ftpmirror.gnu.org/emacs/ for a list of all versions.
+
+As a special case, the version "${snapshot}" or "snapshot" refers to the snapshot.
 `);
 }
 
@@ -33,6 +37,17 @@ See http://ftpmirror.gnu.org/emacs/ for a list of all versions.
  */
 function downloadEmacs(version) {
   const results = [];
+  if (version === snapshot) {
+    const res = spawnSync("wget", [
+      "-c",
+      `https://github.com/emacs-mirror/emacs/archive/${snapshot_rev}.tar.gz`,
+    ]);
+    if (res.status === 0) {
+      return `${snapshot_rev}.tar.gz`;
+    }
+    log("Downloading snapshot failed");
+    process.exit(1);
+  }
   for (const ext of ["xz", "bz2", "gz"]) {
     const file = `emacs-${version}.tar.${ext}`;
     if (fs.existsSync(file)) {
@@ -106,9 +121,11 @@ function dir_of(version) {
   // same.
   if (["23.2b", "21.4a"].includes(version)) {
     return `emacs-${v.slice(0, -1)}`;
-  } else {
-    return `emacs-${v}`;
   }
+  if (version === snapshot) {
+    return `emacs-${snapshot_rev}`;
+  }
+  return `emacs-${v}`;
 }
 
 /** @param {string} version */
@@ -235,6 +252,10 @@ async function build(version) {
 }
 
 let v = process.argv[2];
+// make it a usable version number
+if (v === "snapshot") {
+  v = snapshot;
+}
 
 if (!v) {
   print_help();

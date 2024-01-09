@@ -2,6 +2,10 @@
 
 import assert from "node:assert/strict";
 
+export const snapshot = "30.0.50";
+// From https://github.com/purcell/nix-emacs-ci/blob/-/flake.lock#L231
+export const snapshot_rev = "14504fca8b5589c5c80a69dcab6e02681b196fa1";
+
 let separator = ".";
 
 /** @type {[RegExp, number][]} */

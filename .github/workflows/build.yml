@@ -16,6 +16,8 @@ jobs:
         # It might be worth it to switch to GitLab CI so we can use
         # older Ubuntu releases.
         include:
+          - emacs: snapshot
+            os: ubuntu-22.04
           - emacs: 29.1
             os: ubuntu-22.04
           - emacs: 28.2

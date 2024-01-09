@@ -4,10 +4,17 @@ import {
   // VersionLessThanOrEqual,
   // VersionLessThan,
   VersionBetween,
+  snapshot,
+  snapshot_rev,
 } from "./version.mjs";
 import { cmd } from "./helpers.mjs";
 
 let v = process.argv[2];
+// make it a usable version number
+if (v === "snapshot") {
+  v = snapshot;
+}
+
 if (!v) {
   process.exit(1);
 }
@@ -103,7 +110,7 @@ echo "Deleting excluded dependencies..."
 delete_blacklisted ${excludelist}
 rm -rf app/ || true
 GLIBC_NEEDED=$(glibc_needed)
-VERSION="${v}"
+VERSION="${v}${v === snapshot ? "-" + snapshot_rev : ""}"
 
 echo "Trying to copy webkit2gtk-4.0..."
 # mkdir -p ./lib/x86_64-linux-gnu/webkit2gtk-4.0
